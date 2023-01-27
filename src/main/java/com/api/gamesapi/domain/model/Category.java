@@ -1,5 +1,5 @@
 package com.api.gamesapi.domain.model;
 
 public enum Category {
-    ACTION,RPG,TERROR,
+    ACTION,RPG,TERROR,PLATFORM
 }
