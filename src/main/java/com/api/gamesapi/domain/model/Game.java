@@ -1,6 +1,7 @@
 package com.api.gamesapi.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class Game {
     private Long id;
 
     @NotNull
+    @NotBlank
     private String name;
     @Enumerated(EnumType.STRING)
     private Category category;

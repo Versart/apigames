@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/games")
@@ -26,5 +27,25 @@ public class GameController {
     public Game saveGame(@RequestBody Game game) {
         return gameService.saveGame(game);
     }
+
+    @PutMapping("/{gameId}")
+    public ResponseEntity<Game> updateGameById(@PathVariable long gameId, @RequestBody Game game) {
+        return gameService.searchGameById(gameId).map(
+                gameOld -> {
+                    game.setId(gameOld.getId());
+                    return ResponseEntity.ok(gameService.saveGame(game));
+                }
+        ).orElse(ResponseEntity.notFound().build());
+    }
+
+   @DeleteMapping("/{gameId}")
+    public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
+        Optional<Game> gameEncontrado = gameService.searchGameById(gameId);
+        if(gameEncontrado.isPresent()){
+            gameService.deleteGame(gameId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+   }
 
 }
