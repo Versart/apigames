@@ -1,8 +1,7 @@
 package com.api.gamesapi.domain.service;
 
-import com.api.gamesapi.domain.exception.GameNotFoundException;
-import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.repository.GameRepository;
+import com.api.gamesapi.domain.model.Game;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

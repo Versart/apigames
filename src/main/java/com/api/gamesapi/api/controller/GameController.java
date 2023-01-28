@@ -2,6 +2,7 @@ package com.api.gamesapi.api.controller;
 
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.service.GameService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,12 @@ public class GameController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Game saveGame(@RequestBody Game game) {
+    public Game saveGame(@Valid @RequestBody Game game) {
         return gameService.saveGame(game);
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<Game> updateGameById(@PathVariable long gameId, @RequestBody Game game) {
+    public ResponseEntity<Game> updateGameById(@PathVariable long gameId, @Valid @RequestBody Game game) {
         return gameService.searchGameById(gameId).map(
                 gameOld -> {
                     game.setId(gameOld.getId());
