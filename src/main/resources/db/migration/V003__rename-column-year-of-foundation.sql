@@ -1,0 +1,1 @@
+alter table company rename column year_of_foundation to date_of_foundation;
