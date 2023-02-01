@@ -25,7 +25,7 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(long gameId) {
+    public void deleteGameById(long gameId) {
         gameRepository.deleteById(gameId);
     }
 

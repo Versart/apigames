@@ -23,6 +23,17 @@ public class GameController {
         return gameService.listGames();
     }
 
+    @GetMapping("/{gameId}")
+    public ResponseEntity<Game> getGameById(@PathVariable long gameId){
+        return gameService.searchGameById(gameId).map(
+                game -> {
+                    return ResponseEntity.ok(game);
+                }
+        ).orElse(
+                ResponseEntity.notFound().build()
+        );
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Game saveGame(@Valid @RequestBody Game game) {
@@ -43,7 +54,7 @@ public class GameController {
     public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
         Optional<Game> gameEncontrado = gameService.searchGameById(gameId);
         if(gameEncontrado.isPresent()){
-            gameService.deleteGame(gameId);
+            gameService.deleteGameById(gameId);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
