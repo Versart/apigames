@@ -1,5 +1,6 @@
 package com.api.gamesapi.domain.model;
 
+import com.api.gamesapi.domain.validationgroup.ValidationGroup;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(groups = ValidationGroup.CompanyId.class)
     private Long id;
     @NotBlank
     @NotNull
