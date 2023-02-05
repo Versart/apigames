@@ -5,6 +5,7 @@ import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.service.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,9 @@ public class CompanyController {
     private CompanyService companyService;
 
     @PostMapping
-    public ResponseEntity<Company> saveCompany(@Valid @RequestBody Company company) {
-        return ResponseEntity.ok(companyService.saveCompany(company));
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompanyDTO saveCompany(@Valid @RequestBody CompanyDTO companyDTO) {
+        return companyService.saveCompany(companyDTO);
     }
 
     @GetMapping
@@ -29,16 +31,10 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable long companyId) {
-        return companyService.searchCompanyById(companyId).map(
-               company -> {
-                  return ResponseEntity.ok(company);
-               }
-        ).orElse(
-                ResponseEntity.notFound().build()
-        );
+    public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable long companyId) {
+        return ResponseEntity.ok(companyService.searchCompanyById(companyId));
     }
-
+    /*
     @PutMapping("/{companyId}")
     public ResponseEntity<Company> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody Company company){
         return companyService.searchCompanyById(companyId).map(
@@ -49,8 +45,8 @@ public class CompanyController {
         ).orElse(
                 ResponseEntity.notFound().build()
         );
-    }
-    @DeleteMapping("/{companyId}")
+    }*/
+   /* @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyById(@PathVariable long companyId){
         Optional<Company> companyDelete = companyService.searchCompanyById(companyId);
         if(companyDelete.isPresent()){
@@ -58,5 +54,5 @@ public class CompanyController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }
+    }*/
 }

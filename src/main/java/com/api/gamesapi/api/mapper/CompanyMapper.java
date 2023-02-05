@@ -15,10 +15,17 @@ public class CompanyMapper {
     @Autowired
     private ModelMapper modelMapper;
 
+    public CompanyDTO toModel(Company company) {
+        return modelMapper.map(company,CompanyDTO.class);
+    }
 
    public List<CompanyDTO> toModelList(List<Company> companies) {
         return companies.stream().map(
                 company -> modelMapper.map(company,CompanyDTO.class)
         ).collect(Collectors.toList());
+   }
+
+   public Company toEntity(CompanyDTO companyDTO) {
+        return modelMapper.map(companyDTO,Company.class);
    }
 }
