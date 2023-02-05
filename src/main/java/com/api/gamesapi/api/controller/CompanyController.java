@@ -1,5 +1,6 @@
 package com.api.gamesapi.api.controller;
 
+import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.service.CompanyService;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> listCompanies() {
+    public List<CompanyDTO> listCompanies() {
         return companyService.listCompanies();
     }
 

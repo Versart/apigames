@@ -1,19 +1,26 @@
 package com.api.gamesapi.domain.service;
 
+import com.api.gamesapi.api.mapper.CompanyMapper;
+import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private CompanyMapper companyMapper;
 
 
     @Transactional
@@ -30,8 +37,8 @@ public class CompanyService {
         return companyRepository.findById(companyId);
     }
 
-    public List<Company> listCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyDTO> listCompanies() {
+      return companyMapper.toModelList(companyRepository.findAll());
     }
 
 }
