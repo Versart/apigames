@@ -42,6 +42,24 @@ public class CompanyService {
         ).orElseThrow( () -> new NotFoundException("Company not found"));
     }
 
+    public CompanyDTO searchCompanyById(long companyId, CompanyDTO companyDTO) {
+        return companyRepository.findById(companyId).map(
+                company -> {
+                    company.setName(companyDTO.getName());
+                    company.setDateOfFoundation(companyDTO.getDateOfFoundation());
+                    return companyMapper.toModel(companyRepository.save(company));
+                }
+        ).orElseThrow(() -> new NotFoundException("Company not found"));
+    }
+
+    public boolean companyExists(Long companyId) {
+        if(companyRepository.existsById(companyId)){
+            companyRepository.deleteById(companyId);
+            return true;
+        }
+        throw new NotFoundException("Company not found");
+    }
+
     public List<CompanyDTO> listCompanies() {
       return companyMapper.toModelList(companyRepository.findAll());
     }

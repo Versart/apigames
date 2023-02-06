@@ -34,25 +34,18 @@ public class CompanyController {
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable long companyId) {
         return ResponseEntity.ok(companyService.searchCompanyById(companyId));
     }
-    /*
+
     @PutMapping("/{companyId}")
-    public ResponseEntity<Company> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody Company company){
-        return companyService.searchCompanyById(companyId).map(
-                companyOld -> {
-                    company.setId(companyOld.getId());
-                    return ResponseEntity.ok(companyService.saveCompany(company));
-                }
-        ).orElse(
-                ResponseEntity.notFound().build()
-        );
-    }*/
-   /* @DeleteMapping("/{companyId}")
+    public ResponseEntity<CompanyDTO> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody CompanyDTO companyDTO){
+        return ResponseEntity.ok(companyService.searchCompanyById(companyId,companyDTO));
+    }
+    @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyById(@PathVariable long companyId){
-        Optional<Company> companyDelete = companyService.searchCompanyById(companyId);
-        if(companyDelete.isPresent()){
+        boolean companyExists = companyService.companyExists(companyId);
+        if(companyExists){
             companyService.deleteCompanyById(companyId);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }*/
+    }
 }
