@@ -1,5 +1,6 @@
 package com.api.gamesapi.api.controller;
 
+import com.api.gamesapi.api.model.GameDTO;
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.service.GameService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping
-    public List<Game> listGames() {
+    public List<GameDTO> listGames() {
         return gameService.listGames();
     }
 

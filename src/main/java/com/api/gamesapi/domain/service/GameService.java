@@ -1,5 +1,7 @@
 package com.api.gamesapi.domain.service;
 
+import com.api.gamesapi.api.mapper.GameMapper;
+import com.api.gamesapi.api.model.GameDTO;
 import com.api.gamesapi.domain.repository.GameRepository;
 import com.api.gamesapi.domain.model.Game;
 import jakarta.transaction.Transactional;
@@ -14,9 +16,13 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private GameMapper gameMapper;
 
-    public List<Game> listGames(){
-        return gameRepository.findAll();
+
+    public List<GameDTO> listGames(){
+
+        return gameMapper.toModelList(gameRepository.findAll());
     }
 
     @Transactional

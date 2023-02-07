@@ -7,9 +7,10 @@ import lombok.Setter;
 @Setter
 public class GameDTO {
 
+
     private String name;
 
-    private String company;
+    private String companyName;
 
 
 }
