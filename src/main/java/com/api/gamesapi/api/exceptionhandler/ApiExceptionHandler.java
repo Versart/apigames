@@ -1,5 +1,6 @@
 package com.api.gamesapi.api.exceptionhandler;
 
+import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -43,6 +44,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,problem,headers,status,request);
     }
 
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public ResponseEntity<Object> handleNotFoundCompany(NotFoundException ex, WebRequest webRequest) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        Problem problem = new Problem();
+        problem.setStatusCode(httpStatus.value());
+        problem.setDateTime(OffsetDateTime.now());
+        problem.setMessage(ex.getMessage());
+
+        return handleExceptionInternal(ex,problem, new HttpHeaders(),httpStatus,webRequest);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNotFound(NotFoundException ex, WebRequest webRequest) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
@@ -53,4 +65,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex,problem, new HttpHeaders(),httpStatus,webRequest);
     }
+
+
 }

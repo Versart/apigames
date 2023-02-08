@@ -10,6 +10,7 @@ public class GameDTO {
 
     private String name;
 
+
     private String companyName;
 
 

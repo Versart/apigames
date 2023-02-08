@@ -37,10 +37,10 @@ public class GameController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Game saveGame(@Valid @RequestBody Game game) {
+    public GameDTO saveGame(@Valid @RequestBody Game game) {
         return gameService.saveGame(game);
     }
-
+    /*
     @PutMapping("/{gameId}")
     public ResponseEntity<Game> updateGameById(@PathVariable long gameId, @Valid @RequestBody Game game) {
         return gameService.searchGameById(gameId).map(
@@ -59,6 +59,6 @@ public class GameController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-   }
+   }*/
 
 }
