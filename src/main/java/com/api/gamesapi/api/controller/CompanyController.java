@@ -1,7 +1,6 @@
 package com.api.gamesapi.api.controller;
 
 import com.api.gamesapi.api.model.CompanyDTO;
-import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.service.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/companies")
@@ -26,8 +24,9 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<CompanyDTO> listCompanies() {
-        return companyService.listCompanies();
+    public ResponseEntity<List<CompanyDTO>> listCompanies() {
+
+        return ResponseEntity.ok(companyService.listCompanies());
     }
 
     @GetMapping("/{companyId}")
@@ -37,7 +36,7 @@ public class CompanyController {
 
     @PutMapping("/{companyId}")
     public ResponseEntity<CompanyDTO> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody CompanyDTO companyDTO){
-        return ResponseEntity.ok(companyService.searchCompanyById(companyId,companyDTO));
+        return ResponseEntity.ok(companyService.updateCompanyById(companyId,companyDTO));
     }
     @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyById(@PathVariable long companyId){

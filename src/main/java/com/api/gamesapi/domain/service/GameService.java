@@ -4,6 +4,7 @@ import com.api.gamesapi.api.mapper.GameMapper;
 import com.api.gamesapi.api.model.GameDTO;
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.NotFoundException;
+import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.domain.repository.GameRepository;
@@ -47,9 +48,26 @@ public class GameService {
         gameRepository.deleteById(gameId);
     }
 
-    public Optional<Game> searchGameById(Long gameId) {
-        return gameRepository.findById(gameId);
+    public GameDTO searchGameById(Long gameId) {
+        return gameRepository.findById(gameId).map(
+                game -> gameMapper.toModel(game)
+        ).orElseThrow( () -> new NotFoundException("Game not found!"));
     }
 
+    public GameDTO updateGameById(Long gameId, Game game) {
+
+        return gameRepository.findById(gameId).map(
+                gameUpdate -> {
+                    game.setId(gameUpdate.getId());
+                    return gameMapper.toModel(gameRepository.save(game));
+                }
+        ).orElseThrow(() -> new NotFoundException("Company not found!"));
+    }
+
+    public boolean gameExists(Long gameId) {
+        if(gameRepository.existsById(gameId))
+            return true;
+        throw new NotFoundException("Game not found!");
+    }
 
 }

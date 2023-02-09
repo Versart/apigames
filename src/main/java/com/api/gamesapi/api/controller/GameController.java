@@ -25,14 +25,8 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<Game> getGameById(@PathVariable long gameId){
-        return gameService.searchGameById(gameId).map(
-                game -> {
-                    return ResponseEntity.ok(game);
-                }
-        ).orElse(
-                ResponseEntity.notFound().build()
-        );
+    public ResponseEntity<GameDTO> getGameById(@PathVariable long gameId){
+        return ResponseEntity.ok(gameService.searchGameById(gameId));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -40,25 +34,20 @@ public class GameController {
     public GameDTO saveGame(@Valid @RequestBody Game game) {
         return gameService.saveGame(game);
     }
-    /*
+
     @PutMapping("/{gameId}")
-    public ResponseEntity<Game> updateGameById(@PathVariable long gameId, @Valid @RequestBody Game game) {
-        return gameService.searchGameById(gameId).map(
-                gameOld -> {
-                    game.setId(gameOld.getId());
-                    return ResponseEntity.ok(gameService.saveGame(game));
-                }
-        ).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<GameDTO> updateGameById(@PathVariable long gameId, @Valid @RequestBody Game game) {
+        return ResponseEntity.ok(gameService.updateGameById(gameId,game));
     }
 
    @DeleteMapping("/{gameId}")
     public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
-        Optional<Game> gameEncontrado = gameService.searchGameById(gameId);
-        if(gameEncontrado.isPresent()){
+
+        if(gameService.gameExists(gameId)){
             gameService.deleteGameById(gameId);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-   }*/
+   }
 
 }
