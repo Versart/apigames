@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GameDTO {
+public class GameResponseDTO {
 
 
     private String name;

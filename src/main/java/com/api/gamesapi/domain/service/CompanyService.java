@@ -51,7 +51,6 @@ public class CompanyService {
     public boolean companyExists(Long companyId) {
         if(companyRepository.existsById(companyId))
             return true;
-
         throw new NotFoundException("Company not found");
     }
 

@@ -1,6 +1,7 @@
 package com.api.gamesapi.api.controller;
 
-import com.api.gamesapi.api.model.GameDTO;
+import com.api.gamesapi.api.model.GameRequestDTO;
+import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.service.GameService;
 import jakarta.validation.Valid;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/games")
@@ -20,23 +20,24 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping
-    public List<GameDTO> listGames() {
+    public List<GameResponseDTO> listGames() {
         return gameService.listGames();
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<GameDTO> getGameById(@PathVariable long gameId){
+    public ResponseEntity<GameResponseDTO> getGameById(@PathVariable long gameId){
         return ResponseEntity.ok(gameService.searchGameById(gameId));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public GameDTO saveGame(@Valid @RequestBody Game game) {
+    public GameResponseDTO saveGame(@Valid @RequestBody GameRequestDTO game) {
+
         return gameService.saveGame(game);
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<GameDTO> updateGameById(@PathVariable long gameId, @Valid @RequestBody Game game) {
+    public ResponseEntity<GameResponseDTO> updateGameById(@PathVariable long gameId, @Valid @RequestBody GameRequestDTO game) {
         return ResponseEntity.ok(gameService.updateGameById(gameId,game));
     }
 

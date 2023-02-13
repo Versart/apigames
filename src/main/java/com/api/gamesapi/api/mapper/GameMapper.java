@@ -1,6 +1,7 @@
 package com.api.gamesapi.api.mapper;
 
-import com.api.gamesapi.api.model.GameDTO;
+import com.api.gamesapi.api.model.GameRequestDTO;
+import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Game;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,17 @@ public class GameMapper {
     private ModelMapper modelMapper;
 
 
-    public GameDTO toModel(Game game) {
-        return modelMapper.map(game, GameDTO.class);
+    public GameResponseDTO toModelResponse(Game game) {
+        return modelMapper.map(game, GameResponseDTO.class);
     }
 
-    public List<GameDTO> toModelList(List<Game> games){
+    public List<GameResponseDTO> toModelResponseList(List<Game> games){
         return games.stream().map(
-                game -> modelMapper.map(game, GameDTO.class)
+                game -> modelMapper.map(game, GameResponseDTO.class)
         ).collect(Collectors.toList());
+    }
+
+    public Game toEntity(GameRequestDTO gameRequesteDTO){
+        return modelMapper.map(gameRequesteDTO,Game.class);
     }
 }
