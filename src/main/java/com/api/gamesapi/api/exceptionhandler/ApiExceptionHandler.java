@@ -34,7 +34,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             String name = ((FieldError) objectError).getField();
             String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
             inputs.add(new Input(name,message));
-
         }
         Problem problem = new Problem();
         problem.setStatusCode(status.value());
