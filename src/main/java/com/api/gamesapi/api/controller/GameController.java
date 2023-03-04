@@ -6,6 +6,8 @@ import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.service.GameService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +22,13 @@ public class GameController {
     private GameService gameService;
 
     @GetMapping
-    public List<GameResponseDTO> listGames() {
-        return gameService.listGames();
+    public ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> listGames() {
+
+        return ResponseEntity.ok(gameService.listGames());
     }
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<GameResponseDTO> getGameById(@PathVariable long gameId){
+    public ResponseEntity<EntityModel<GameResponseDTO>> getGameById(@PathVariable long gameId){
         return ResponseEntity.ok(gameService.searchGameById(gameId));
     }
 

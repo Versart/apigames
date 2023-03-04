@@ -8,6 +8,7 @@ import lombok.Setter;
 public class GameResponseDTO {
 
 
+
     private String name;
 
 
