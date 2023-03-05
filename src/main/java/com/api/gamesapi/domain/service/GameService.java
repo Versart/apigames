@@ -26,12 +26,17 @@ public class GameService {
 
     @Autowired
     private GameMapper gameMapper;
+
     @Autowired
     private CompanyService companyService;
 
     public CollectionModel<EntityModel<GameResponseDTO>> listGames() {
         List<EntityModel<GameResponseDTO>> gamesModel;
         return gameMapper.toModelResponseList(gameRepository.findAll());
+    }
+
+    public CollectionModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId){
+        return gameMapper.toModelResponseList(gameRepository.findByCompanyId(companyId));
     }
 
     @Transactional
