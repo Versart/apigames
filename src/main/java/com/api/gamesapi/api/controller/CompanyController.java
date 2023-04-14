@@ -3,6 +3,7 @@ package com.api.gamesapi.api.controller;
 import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/companies")
+@AllArgsConstructor
 public class CompanyController {
 
-    @Autowired
+
     private CompanyService companyService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CompanyDTO saveCompany(@Valid @RequestBody CompanyDTO companyDTO) {
-        return companyService.saveCompany(companyDTO);
+    public ResponseEntity<CompanyDTO> saveCompany(@Valid @RequestBody CompanyDTO companyDTO) {
+        return new ResponseEntity<>(companyService.saveCompany(companyDTO),HttpStatus.CREATED);
     }
 
     @GetMapping
