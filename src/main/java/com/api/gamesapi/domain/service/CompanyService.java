@@ -44,6 +44,9 @@ public class CompanyService {
 
         ).orElseThrow(() -> new NotFoundException("Company not found!"));
     }
+    public CollectionModel<EntityModel<CompanyDTO>> findCompanyByName(String name){
+        return companyMapper.toModelList(companyRepository.findByName(name));
+    }
 
     public EntityModel<CompanyDTO> updateCompanyById(long companyId, CompanyDTO companyDTO) {
         return companyRepository.findById(companyId).map(
