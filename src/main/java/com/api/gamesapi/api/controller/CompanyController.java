@@ -38,6 +38,10 @@ public class CompanyController {
     public ResponseEntity<EntityModel<CompanyDTO>> getCompanyById(@PathVariable long companyId) {
         return ResponseEntity.ok(companyService.searchCompanyById(companyId));
     }
+    @GetMapping("/find")
+    public ResponseEntity<CollectionModel<EntityModel<CompanyDTO>>> getByName(@RequestParam String name){
+        return ResponseEntity.ok(companyService.findCompanyByName(name));
+    }
 
     @GetMapping("/{companyId}/games")
     public ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> getGamesByCompanyId(@PathVariable Long companyId ){
