@@ -9,29 +9,26 @@ import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.domain.repository.GameRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class GameService {
-    @Autowired
-    private GameRepository gameRepository;
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final GameRepository gameRepository;
 
-    @Autowired
-    private GameMapper gameMapper;
 
-    @Autowired
-    private CompanyService companyService;
+    private final CompanyRepository companyRepository;
+
+
+    private final GameMapper gameMapper;
+
+
 
     public CollectionModel<EntityModel<GameResponseDTO>> listGames() {
-        List<EntityModel<GameResponseDTO>> gamesModel;
         return gameMapper.toModelResponseList(gameRepository.findAll());
     }
 
@@ -48,7 +45,6 @@ public class GameService {
                 }
         ).orElseThrow(() -> new CompanyNotFoundException("Company not found!"));
     }
-
     @Transactional
     public void deleteGameById(long gameId) {
         gameRepository.deleteById(gameId);
@@ -57,9 +53,7 @@ public class GameService {
     public EntityModel<GameResponseDTO> searchGameById(Long gameId) {
 
         return gameRepository.findById(gameId).map(
-                game ->
-                       gameMapper.toModelResponse(game)
-
+                       gameMapper::toModelResponse
         ).orElseThrow(() -> new NotFoundException("Game not found!"));
     }
 

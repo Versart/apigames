@@ -7,24 +7,25 @@ import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 
 @Service
+@RequiredArgsConstructor
 public class CompanyService {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @Autowired
-    private CompanyMapper companyMapper;
+    private final CompanyMapper companyMapper;
 
-    @Autowired
-    private GameService gameService;
+
+    private final GameService gameService;
+
+
 
     @Transactional
     public EntityModel<CompanyDTO> saveCompany(CompanyDTO companyDTO) {
@@ -38,9 +39,9 @@ public class CompanyService {
 
     public EntityModel<CompanyDTO> searchCompanyById(Long companyId) {
         return companyRepository.findById(companyId).map(
-                company -> {
-                    return companyMapper.toModel(company);
-                }
+
+                     companyMapper::toModel
+
         ).orElseThrow(() -> new NotFoundException("Company not found!"));
     }
 

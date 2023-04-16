@@ -4,21 +4,24 @@ import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/companies")
+@RequiredArgsConstructor
 public class CompanyController {
 
-    @Autowired
-    private CompanyService companyService;
+
+    private final CompanyService companyService;
+
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

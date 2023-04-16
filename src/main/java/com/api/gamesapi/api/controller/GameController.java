@@ -4,7 +4,7 @@ import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.GameService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/games")
+@RequiredArgsConstructor
 public class GameController {
 
-    @Autowired
-    private GameService gameService;
+    private final GameService gameService;
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> listGames() {
