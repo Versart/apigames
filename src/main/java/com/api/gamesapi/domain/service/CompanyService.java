@@ -5,11 +5,15 @@ import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.NotFoundException;
+import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 
@@ -64,8 +68,9 @@ public class CompanyService {
         throw new NotFoundException("Company not found");
     }
 
-    public CollectionModel<EntityModel<CompanyDTO>> listCompanies() {
-      return companyMapper.toModelList(companyRepository.findAll());
+    public PagedModel<EntityModel<CompanyDTO>> listCompanies(Pageable pageable) {
+        Page<Company> companyPage = companyRepository.findAll(pageable);
+        return companyMapper.toModelPage(companyPage);
     }
 
     public CollectionModel<EntityModel<GameResponseDTO>> getGamesOfCompany(Long companyId) {
