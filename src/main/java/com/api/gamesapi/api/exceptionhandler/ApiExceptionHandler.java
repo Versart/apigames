@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,6 +65,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex,problem, new HttpHeaders(),httpStatus,webRequest);
     }
+
+    @Nullable
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        Problem problem = new Problem();
+        problem.setStatusCode(httpStatus.value());
+        problem.setDateTime(OffsetDateTime.now());
+        problem.setMessage(ex.getMessage());
+        return this.createResponseEntity(problem, headers, statusCode, request);
+    }
+
+
 
 
 }
