@@ -2,12 +2,13 @@ package com.api.gamesapi.api.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CompanyDTO {
 
     @NotNull
@@ -16,4 +17,6 @@ public class CompanyDTO {
 
     @NotNull
     private LocalDate dateOfFoundation;
+
+
 }

@@ -69,7 +69,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Nullable
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         Problem problem = new Problem();
         problem.setStatusCode(httpStatus.value());
         problem.setDateTime(OffsetDateTime.now());
