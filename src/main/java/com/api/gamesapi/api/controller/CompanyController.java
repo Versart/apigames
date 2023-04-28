@@ -56,11 +56,7 @@ public class CompanyController {
     }
     @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyById(@PathVariable long companyId){
-        boolean companyExists = companyService.companyExists(companyId);
-        if(companyExists){
-            companyService.deleteCompanyById(companyId);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        companyService.deleteCompanyById(companyId);
+        return ResponseEntity.noContent().build();
     }
 }

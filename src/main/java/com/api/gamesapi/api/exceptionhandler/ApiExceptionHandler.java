@@ -66,7 +66,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,problem, new HttpHeaders(),httpStatus,webRequest);
     }
 
-    @Nullable
+   /* @Nullable
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
@@ -75,9 +75,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setDateTime(OffsetDateTime.now());
         problem.setMessage(ex.getMessage());
         return this.createResponseEntity(problem, headers, statusCode, request);
-    }
-
-
-
+    }*/
 
 }
