@@ -38,8 +38,10 @@ public class CompanyService {
 
     @Transactional
     public void deleteCompanyById(long companyId) {
-        companyRepository.findById(companyId).ifPresent( company -> companyRepository.deleteById(companyId));
-        throw new NotFoundException("Company not found!");
+        if(companyRepository.existsById(companyId))
+            companyRepository.deleteById(companyId);
+        else
+            throw new NotFoundException("Company not found!");
     }
 
     public EntityModel<CompanyDTO> searchCompanyById(Long companyId) {
