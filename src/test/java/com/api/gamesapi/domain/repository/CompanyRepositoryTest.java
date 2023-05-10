@@ -35,6 +35,6 @@ class CompanyRepositoryTest {
        /* Assertions.assertThatThrownBy( () -> companyRepository.save(company))
                 .isInstanceOf(ConstraintViolationException.class);*/
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
-                .isThrownBy(() -> companyRepository.save(company)).withMessageContaining("não deve ser nulo");
+                .isThrownBy(() -> companyRepository.save(company)).withMessageContaining("must not be null");
     }
 }
