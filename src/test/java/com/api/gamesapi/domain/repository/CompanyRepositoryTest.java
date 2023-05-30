@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
-
+import java.util.Optional;
 
 
 @DataJpaTest
@@ -31,10 +31,44 @@ class CompanyRepositoryTest {
     @DisplayName("Save creates company when successful")
     public void save_PersistCompany_WhenSuccessful() {
         Company companyToBeSaved = createCompany();
+
         Company savedCompany = this.companyRepository.save(companyToBeSaved);
+
         Assertions.assertThat(savedCompany).isNotNull();
+
         Assertions.assertThat(savedCompany.getId()).isNotNull();
+
         Assertions.assertThat(savedCompany.getName()).isEqualTo(companyToBeSaved.getName());
+    }
+
+    @Test
+    @DisplayName("Save updates company when successful")
+    public void save_UpdatesCompany_WhenSuccessful() {
+        Company companyToBeSaved = createCompany();
+        Company savedCompany = companyRepository.save(companyToBeSaved);
+
+        savedCompany.setName("Companhia Y teste");
+
+        Company updatedCompany = companyRepository.save(savedCompany);
+
+        Assertions.assertThat(updatedCompany).isNotNull();
+
+        Assertions.assertThat(updatedCompany.getId()).isEqualTo(savedCompany.getId());
+
+        Assertions.assertThat(updatedCompany.getName()).isEqualTo(savedCompany.getName());
+    }
+
+    @Test
+    @DisplayName("Delete remove company when successful")
+    public void delete_RemoveCompany_WhenSuccessful() {
+        Company companyToBeSaved = createCompany();
+        Company savedCompany = companyRepository.save(companyToBeSaved);
+
+        companyRepository.delete(savedCompany);
+
+        Optional<Company> companyOptional = companyRepository.findById(savedCompany.getId());
+
+        Assertions.assertThat(companyOptional).isEmpty();
     }
     @Test
     public void save_ThrowsConstraintException_WhenNameIsEmpty() {
