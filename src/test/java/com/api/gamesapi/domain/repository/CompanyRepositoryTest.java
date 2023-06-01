@@ -1,6 +1,7 @@
 package com.api.gamesapi.domain.repository;
 
 import com.api.gamesapi.domain.model.Company;
+import com.api.gamesapi.util.CompanyCreator;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,15 +23,11 @@ class CompanyRepositoryTest {
 
 
 
-    public Company createCompany() {
-        return Company.builder().name("Companhia Z teste")
-                .dateOfFoundation(LocalDate.now())
-                .build();
-    }
+
     @Test
     @DisplayName("Save creates company when successful")
     public void save_PersistCompany_WhenSuccessful() {
-        Company companyToBeSaved = createCompany();
+        Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = this.companyRepository.save(companyToBeSaved);
 
@@ -44,7 +41,8 @@ class CompanyRepositoryTest {
     @Test
     @DisplayName("Save updates company when successful")
     public void save_UpdatesCompany_WhenSuccessful() {
-        Company companyToBeSaved = createCompany();
+        Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
+
         Company savedCompany = companyRepository.save(companyToBeSaved);
 
         savedCompany.setName("Companhia Y teste");
@@ -61,7 +59,8 @@ class CompanyRepositoryTest {
     @Test
     @DisplayName("Delete remove company when successful")
     public void delete_RemoveCompany_WhenSuccessful() {
-        Company companyToBeSaved = createCompany();
+        Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
+
         Company savedCompany = companyRepository.save(companyToBeSaved);
 
         companyRepository.delete(savedCompany);
@@ -70,13 +69,43 @@ class CompanyRepositoryTest {
 
         Assertions.assertThat(companyOptional).isEmpty();
     }
+
     @Test
+    @DisplayName("Find by name return List of company when successful")
+    public void findByName_ReturnsListOfAnime_WhenSuccessful() {
+        Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
+
+        Company savedCompany = companyRepository.save(companyToBeSaved);
+
+        List<Company> companyList = companyRepository.findByName(savedCompany.getName());
+
+        Assertions.assertThat(companyList).isNotNull();
+
+        Assertions.assertThat(companyList.size()).isGreaterThanOrEqualTo(1);
+
+        Assertions.assertThat(companyList).contains(savedCompany);
+    }
+
+    @Test
+    @DisplayName("Find by name return List of company empty when no company is found")
+    public void findByName_ReturnsEmptyListOfAnime_WhenCompanyIsNotFound() {
+
+        List<Company> companyList = companyRepository.findByName("");
+
+        Assertions.assertThat(companyList).isNotNull();
+
+        Assertions.assertThat(companyList).isEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Save throw ConstraintValidationException when name is empty")
     public void save_ThrowsConstraintException_WhenNameIsEmpty() {
-        Company company = new Company();
-        company.setDateOfFoundation(LocalDate.now());
-       /* Assertions.assertThatThrownBy( () -> companyRepository.save(company))
-                .isInstanceOf(ConstraintViolationException.class);*/
+        Company company = CompanyCreator.createCompanyWithoutName();
+
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> companyRepository.save(company)).withMessageContaining("must not be null");
+
     }
+
 }

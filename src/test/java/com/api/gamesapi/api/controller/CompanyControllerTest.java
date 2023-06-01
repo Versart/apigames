@@ -6,6 +6,7 @@ import com.api.gamesapi.domain.service.CompanyService;
 import com.api.gamesapi.util.CompanyDTOCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -33,15 +34,12 @@ class CompanyControllerTest {
     @BeforeEach
     void setup() {
         List<EntityModel<CompanyDTO>> entityModels = new ArrayList<>();
-        entityModels.add(EntityModel.of(CompanyDTOCreator.createCompany()));
-        PagedModel<EntityModel<CompanyDTO>> companyPage;
-        companyPage = PagedModel.of(entityModels,new PagedModel.PageMetadata(1,1,1));
         CollectionModel<EntityModel<CompanyDTO>> collectionModel = CollectionModel.of(entityModels);
         EntityModel<CompanyDTO> entityModelCompanyDto = EntityModel.of(CompanyDTOCreator.createCompany());
+        entityModels.add(EntityModel.of(CompanyDTOCreator.createCompany()));
+        PagedModel<EntityModel<CompanyDTO>> companyPage = CompanyDTOCreator.getPageDModelCompanyDTO();
 
         BDDMockito.when(companyServiceMock.listCompanies(ArgumentMatchers.any())).thenReturn(companyPage);
-
-
 
         BDDMockito.when(companyServiceMock.searchCompanyById(ArgumentMatchers.anyLong())).thenReturn(
                 entityModelCompanyDto
@@ -60,13 +58,14 @@ class CompanyControllerTest {
     }
 
     @Test
+    @DisplayName("List returns PagedModel of CompanyDTO when successful")
     void listCompanies_ReturnPageofCompanyDto_WhenSuccessful() {
         PagedModel<EntityModel<CompanyDTO>> companyPage = companyController.listCompanies(null).getBody();
         String nameCompany = CompanyDTOCreator.createCompany().getName();
 
         Assertions.assertThat(companyPage).isNotNull();
 
-        Assertions.assertThat(companyPage).isNotEmpty();
+        Assertions.assertThat(companyPage).isNotEmpty().hasSize(1);
 
         Assertions.assertThat(companyPage.getContent().stream().toList().get(0).getContent().getName())
                 .isEqualTo(nameCompany);
@@ -74,7 +73,7 @@ class CompanyControllerTest {
 
     @Test
     void getCompanyById_ReturnEntityModelOfCompanyDto_WhenSuccessfull() {
-        EntityModel<CompanyDTO> companyDTOModel = companyController.getCompanyById(1l).getBody();
+        EntityModel<CompanyDTO> companyDTOModel = companyController.getCompanyById(1).getBody();
 
         EntityModel<CompanyDTO> companyForTest = EntityModel.of(CompanyDTOCreator.createCompany());
 
