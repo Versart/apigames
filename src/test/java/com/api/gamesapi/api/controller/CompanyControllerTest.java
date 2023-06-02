@@ -31,6 +31,8 @@ class CompanyControllerTest {
     @Mock
     CompanyService companyServiceMock;
 
+
+
     @BeforeEach
     void setup() {
         List<EntityModel<CompanyDTO>> entityModels = new ArrayList<>();

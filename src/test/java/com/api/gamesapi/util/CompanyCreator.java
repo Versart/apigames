@@ -13,6 +13,14 @@ public class CompanyCreator {
                 .build();
     }
 
+    public static Company createValidCompany() {
+        return Company.builder()
+                .id(1l)
+                .name("Companhia Teste X")
+                .dateOfFoundation(LocalDate.now())
+                .build();
+    }
+
     public static Company createCompanyWithoutName() {
         return Company.builder()
                 .dateOfFoundation(LocalDate.now())
