@@ -2,8 +2,10 @@ package com.api.gamesapi.api.controller;
 
 
 import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 import com.api.gamesapi.util.CompanyDTOCreator;
+import com.api.gamesapi.util.GameResponseCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +31,7 @@ class CompanyControllerTest {
     @InjectMocks
     private CompanyController companyController;
     @Mock
-    CompanyService companyServiceMock;
+    private CompanyService companyServiceMock;
 
 
 
@@ -58,6 +60,8 @@ class CompanyControllerTest {
                 ,ArgumentMatchers.any(CompanyDTO.class))).thenReturn(entityModelCompanyDto);
 
         BDDMockito.doNothing().when(companyServiceMock).deleteCompanyById(ArgumentMatchers.anyLong());
+        BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong()))
+                .thenReturn(GameResponseCreator.createCollectionModelGameResponse());
     }
 
     @Test
@@ -72,6 +76,7 @@ class CompanyControllerTest {
 
         Assertions.assertThat(companyPage.getContent().stream().toList().get(0).getContent().getName())
                 .isEqualTo(nameCompany);
+
     }
 
     @Test
@@ -132,6 +137,13 @@ class CompanyControllerTest {
         Assertions.assertThat(companyDTOUpdated).isNotNull()
                 .isEqualTo(EntityModel.of(CompanyDTOCreator.createCompanyDTO()));
 
+    }
+    @Test
+    void getGamesByCompanyId_ReturnCollectionEntityModelOfGamesResponse_WhenSuccessful() {
+        CollectionModel<EntityModel<GameResponseDTO>> gamesByCompanyId =
+                companyController.getGamesByCompanyId(1l).getBody();
+        Assertions.assertThat(gamesByCompanyId).isNotNull().isNotEmpty();
+        Assertions.assertThat(gamesByCompanyId).contains(GameResponseCreator.createEntityModelGameResponse());
     }
 
     @Test

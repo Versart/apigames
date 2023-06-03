@@ -1,6 +1,7 @@
 package com.api.gamesapi.util;
 
 import com.api.gamesapi.api.model.CompanyDTO;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 
@@ -12,9 +13,9 @@ public class CompanyDTOCreator {
     public static CompanyDTO createCompanyDTO() {
         return CompanyDTO.builder().name("Company Test").dateOfFoundation(LocalDate.now()).build();
     }
-
-
-
+    public static CollectionModel<EntityModel<CompanyDTO>> createCollectionModelCompanyDTO() {
+        return CollectionModel.of(List.of(createEntityModelCompanyDTO()));
+    }
     public static PagedModel<EntityModel<CompanyDTO>> createPageDModelCompanyDTO() {
         List<EntityModel<CompanyDTO>> listCompanyDTO = List.of(EntityModel.of(createCompanyDTO()));
         PagedModel<EntityModel<CompanyDTO>> pagedModel = PagedModel.of(listCompanyDTO,
