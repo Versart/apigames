@@ -11,6 +11,7 @@ import com.api.gamesapi.util.CompanyDTOCreator;
 import com.api.gamesapi.util.GameResponseCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -81,21 +82,23 @@ class CompanyServiceTest {
     }
 
     @Test
-    void saveCompany() {
+    @DisplayName("saveCompany returns company when Successful")
+    void saveCompany_ReturnsCompany_WhenSuccessful() {
         EntityModel<CompanyDTO> companyDTOEntityModel = companyService.saveCompany(CompanyDTOCreator.createCompanyDTO());
         Assertions.assertThat(companyDTOEntityModel).isNotNull();
         Assertions.assertThat(companyDTOEntityModel.getContent()).isEqualTo(CompanyDTOCreator.createCompanyDTO());
-
     }
 
     @Test
-    void deleteCompanyById() {
+    @DisplayName("DeleteCompanyById remove company when Successful")
+    void deleteCompanyById_RemoveCompany_WhenSuccessful() {
         Assertions.assertThatCode(() -> companyService.deleteCompanyById(1L))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    void searchCompanyById() {
+    @DisplayName("SearchCompanyById returns company when successful")
+    void searchCompanyById_ReturnsCompany_WhenSuccessful() {
         EntityModel<CompanyDTO> companyDTOEntityModel = companyService.searchCompanyById(1L);
 
         Assertions.assertThat(companyDTOEntityModel).isNotNull();
@@ -103,28 +106,31 @@ class CompanyServiceTest {
     }
 
     @Test
-    void findCompanyByName() {
+    @DisplayName("findCompanyByName returns list of companies when successful")
+    void findCompanyByName_ReturnsListOfCompanies_WhenSuccessful() {
         CollectionModel<EntityModel<CompanyDTO>> companiesByName = companyService.findCompanyByName("");
         Assertions.assertThat(companiesByName).isNotNull().isNotEmpty().hasSize(1);
         Assertions.assertThat(companiesByName).contains(CompanyDTOCreator.createEntityModelCompanyDTO());
     }
 
     @Test
-    void updateCompanyById() {
+    @DisplayName("updateCompanyById returns company when successful")
+    void updateCompanyById_ReturnsCompany_WhenSuccessful() {
         CompanyDTO companyToBeUpdated = CompanyDTOCreator.createCompanyDTO();
         EntityModel<CompanyDTO> alteredCompany = companyService.updateCompanyById(1L, companyToBeUpdated);
         Assertions.assertThat(alteredCompany).isNotNull().isEqualTo(EntityModel.of(companyToBeUpdated));
     }
 
     @Test
-    void companyExists() {
+    @DisplayName("companyExists returns true when successful")
+    void companyExists_ReturnsTrue_WhenSuccessful() {
         boolean companyExists = companyService.companyExists(1L);
         Assertions.assertThat(companyExists).isTrue();
-
 
     }
 
     @Test
+    @DisplayName("listCompanies returns list of companies when successful")
     void listCompanies() {
         PagedModel<EntityModel<CompanyDTO>> pagedModel = companyService.listCompanies(PageRequest.of(1, 1));
         Assertions.assertThat(pagedModel).isNotNull().isNotEmpty();
@@ -132,12 +138,14 @@ class CompanyServiceTest {
     }
 
     @Test
-    void getGamesOfCompany() {
+    @DisplayName("getGamesOfCompany returns list of company games when successful")
+    void getGamesOfCompany_ReturnsListOfComapnyGames_WhenSuccessful() {
         CollectionModel<EntityModel<GameResponseDTO>> gamesOfCompany = companyService.getGamesOfCompany(1l);
         Assertions.assertThat(gamesOfCompany).isNotNull().isNotEmpty();
         Assertions.assertThat(gamesOfCompany).contains(GameResponseCreator.createEntityModelGameResponse());
     }
     @Test
+    @DisplayName("getGamesOfCompany throws companyNotFoundException when company is not found")
     void getGamesOfCompany_ThrowsCompanyNotFoundException_WhenCompanyIsNotFound() {
         BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong()))
                 .thenThrow(CompanyNotFoundException.class);
