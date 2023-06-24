@@ -23,7 +23,7 @@ public class Company {
     @NotNull(groups = ValidationGroup.CompanyId.class)
     private Long id;
     @NotBlank
-    @NotNull
+    @NotNull(message = "must not be null")
     private String name;
 
     @NotNull

@@ -104,8 +104,8 @@ class CompanyRepositoryTest {
         Company company = CompanyCreator.createCompanyWithoutName();
 
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
-                .isThrownBy(() -> companyRepository.save(company)).withMessageContaining("must not be null");
-
+                .isThrownBy(() -> companyRepository.save(company))
+                    .withMessageContaining("must not be null");
     }
 
 }
