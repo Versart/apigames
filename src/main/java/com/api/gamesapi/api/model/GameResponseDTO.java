@@ -7,6 +7,8 @@ import lombok.*;
 @ToString
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GameResponseDTO {
 
 
