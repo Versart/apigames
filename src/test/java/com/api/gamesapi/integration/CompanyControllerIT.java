@@ -1,6 +1,5 @@
 package com.api.gamesapi.integration;
 
-import com.api.gamesapi.api.controller.CompanyController;
 import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Company;
@@ -8,6 +7,7 @@ import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.util.CompanyCreator;
 import com.api.gamesapi.util.CompanyDTOCreator;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CompanyControllerIT {
@@ -44,6 +41,7 @@ public class CompanyControllerIT {
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getBody()).isNotNull().isNotEmpty();
         Assertions.assertThat(exchange.getBody().getContent().contains(companySaved));
+        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
@@ -56,9 +54,9 @@ public class CompanyControllerIT {
                 exchange = testRestTemplate.exchange(url, HttpMethod.GET, null
                 , new ParameterizedTypeReference<EntityModel<CompanyDTO>>() {
                 }, idCompanyExpected);
-
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getBody()).isNotNull();
+        Assertions.assertThat(exchange.getBody().getContent()).isNotNull();
         Assertions.assertThat(exchange.getBody().getLinks()).isNotEmpty().isNotNull();
         Assertions.assertThat(exchange.getBody().getLinks().toString()).contains("/companies/" + idCompanyExpected);
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -67,21 +65,21 @@ public class CompanyControllerIT {
     @Test
     @DisplayName("GetByName returns a collection model of companyDTO when successful")
     void getByName_ReturnCollectionModelOfCompanyDto_WhenSuccessful() {
-        String nameExpected = "Companhia Teste X";
+        Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
+        String nameExpected = companySaved.getName();
         String url = String.format("/companies/find?name=%s", nameExpected);
         ResponseEntity<CollectionModel<EntityModel<CompanyDTO>>> exchange = testRestTemplate
                 .exchange(url, HttpMethod.GET, null,
                         new ParameterizedTypeReference<CollectionModel<EntityModel<CompanyDTO>>>() {
                         });
-
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getStatusCode()).isNotNull().isEqualTo(HttpStatus.OK);
         Assertions.assertThat(exchange.getBody()).isNotNull().isNotEmpty();
-
+        Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isNotEmpty();
+        Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0).getLinks()).isNotNull().isNotEmpty();
         Assertions.assertThat(exchange.getBody().getContent().stream().filter(
                 companyDTOEntityModel -> companyDTOEntityModel.getContent().getName().equals(nameExpected)
         ));
-
     }
 
     @Test
@@ -96,6 +94,8 @@ public class CompanyControllerIT {
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(exchange.getBody()).isNotNull().isEmpty();
+        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isEmpty();
+        Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isEmpty();
     }
 
     @Test
@@ -109,6 +109,7 @@ public class CompanyControllerIT {
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getBody()).isNotNull();
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Assertions.assertThat(exchange.getBody().getContent()).isNotNull();
         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
 
     }
@@ -119,7 +120,6 @@ public class CompanyControllerIT {
         String url = "/companies/{id}";
         CompanyDTO companyToUpdated = CompanyDTOCreator.createCompanyDTO();
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
-        Long idCompanyExpected = companySaved.getId();
         Long idUpdated = companySaved.getId();
         ResponseEntity<EntityModel<CompanyDTO>> exchange = testRestTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(companyToUpdated),
                 new ParameterizedTypeReference<EntityModel<CompanyDTO>>() {
@@ -160,8 +160,8 @@ public class CompanyControllerIT {
 
     }
 
-//    @AfterEach
-//    void setup(){
-//        companyRepository.deleteAll();
-//    }
+    @AfterEach
+    void setup(){
+        companyRepository.deleteAll();
+    }
 }
