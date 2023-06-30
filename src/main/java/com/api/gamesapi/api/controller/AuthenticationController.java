@@ -3,7 +3,9 @@ package com.api.gamesapi.api.controller;
 import com.api.gamesapi.api.model.LoginRequest;
 import com.api.gamesapi.api.model.UserRequest;
 import com.api.gamesapi.api.model.UserResponse;
+import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.service.UserService;
+import com.api.gamesapi.infra.security.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,11 +26,15 @@ public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest){
         var userNamePassword = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),loginRequest.getPassword());
-        authenticationManager.authenticate(userNamePassword);
-        return ResponseEntity.ok().build();
+        var auth = authenticationManager.authenticate(userNamePassword);
+        var token = tokenService.getToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register")
