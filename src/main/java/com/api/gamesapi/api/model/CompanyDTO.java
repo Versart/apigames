@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Builder
 public class CompanyDTO {
 
+    private Long id;
+
     @NotNull
     @NotBlank
     private String name;
