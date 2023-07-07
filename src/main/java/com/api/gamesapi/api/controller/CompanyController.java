@@ -3,6 +3,8 @@ package com.api.gamesapi.api.controller;
 import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/companies")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class CompanyController {
 
 

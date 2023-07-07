@@ -3,6 +3,8 @@ package com.api.gamesapi.api.controller;
 import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.GameService;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/games")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearer-key")
 public class GameController {
 
     private final GameService gameService;

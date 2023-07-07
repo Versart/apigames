@@ -1,7 +1,6 @@
 package com.api.gamesapi.integration;
 
 import com.api.gamesapi.api.model.CompanyDTO;
-import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.api.model.LoginRequest;
 import com.api.gamesapi.domain.model.Company;
@@ -11,7 +10,6 @@ import com.api.gamesapi.domain.repository.GameRepository;
 import com.api.gamesapi.util.CompanyCreator;
 import com.api.gamesapi.util.CompanyDTOCreator;
 import com.api.gamesapi.util.GameCreator;
-import com.api.gamesapi.util.GameResponseCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
