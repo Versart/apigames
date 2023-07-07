@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CompanyDTO {
+public class CompanyResponse {
 
     private Long id;
 

@@ -1,7 +1,8 @@
 package com.api.gamesapi.api.mapper;
 
 import com.api.gamesapi.api.controller.CompanyController;
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
+import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.domain.model.Company;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,15 +29,15 @@ public class CompanyMapper {
 
     private final PagedResourcesAssembler<Company> pagedResourcesAssembler;
 
-    public EntityModel<CompanyDTO> toModel(Company company) {
+    public EntityModel<CompanyResponse> toModel(Company company) {
 
-        return EntityModel.of(modelMapper.map(company,CompanyDTO.class)
+        return EntityModel.of(modelMapper.map(company,CompanyResponse.class)
                 ,linkTo(methodOn(CompanyController.class).getCompanyById(company.getId())).withSelfRel()
 //                ,linkTo(methodOn(CompanyController.class).listCompanies()).withRel("All Companies")
                 );
     }
 
-   public CollectionModel<EntityModel<CompanyDTO>> toModelList(List<Company> companies) {
+   public CollectionModel<EntityModel<CompanyResponse>> toModelList(List<Company> companies) {
         return CollectionModel.of(companies.stream().map(
                 this::toModel
         ).collect(Collectors.toList())
@@ -44,13 +45,13 @@ public class CompanyMapper {
                  );
    }
 
-    public PagedModel<EntityModel<CompanyDTO>> toModelPage(Page pageCompany) {
+    public PagedModel<EntityModel<CompanyResponse>> toModelPage(Page pageCompany) {
 
         return pagedResourcesAssembler.toModel(pageCompany,this::toModel);
 
     }
 
-   public Company toEntity(CompanyDTO companyDTO) {
-        return modelMapper.map(companyDTO,Company.class);
+   public Company toEntity(CompanyRequest companyRequest) {
+        return modelMapper.map(companyRequest,Company.class);
    }
 }

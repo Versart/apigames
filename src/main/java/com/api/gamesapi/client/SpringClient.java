@@ -1,6 +1,6 @@
 package com.api.gamesapi.client;
 
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
 import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Game;
@@ -30,7 +30,7 @@ public class SpringClient {
                         new ParameterizedTypeReference<>() {});
         log.info(game.getBody());
 
-        CompanyDTO companyDTO = new CompanyDTO();
+        CompanyRequest companyDTO = new CompanyRequest();
         companyDTO.setName("Sega");
         companyDTO.setDateOfFoundation(LocalDate.of(1982,5,27));
         /*CompanyDTO companySaved = new RestTemplate()
@@ -44,8 +44,8 @@ public class SpringClient {
                 });
         log.info(companySaved);*/
         companyDTO.setName("Eletronic Arts");
-        ResponseEntity<EntityModel<CompanyDTO>> companyUpdated = new RestTemplate().exchange("http://localhost:8080/companies/15", HttpMethod.PUT,
-                new HttpEntity<>(companyDTO), new ParameterizedTypeReference<EntityModel<CompanyDTO>>() {
+        ResponseEntity<EntityModel<CompanyRequest>> companyUpdated = new RestTemplate().exchange("http://localhost:8080/companies/15", HttpMethod.PUT,
+                new HttpEntity<>(companyDTO), new ParameterizedTypeReference<EntityModel<CompanyRequest>>() {
                 }
         );
         log.info(companyUpdated);

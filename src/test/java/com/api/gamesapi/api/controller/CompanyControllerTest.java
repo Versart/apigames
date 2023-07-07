@@ -1,7 +1,8 @@
 package com.api.gamesapi.api.controller;
 
 
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
+import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 import com.api.gamesapi.util.CompanyDTOCreator;
@@ -37,12 +38,12 @@ class CompanyControllerTest {
 
     @BeforeEach
     void setup() {
-        List<EntityModel<CompanyDTO>> entityModels = new ArrayList<>();
-        entityModels.add(CompanyDTOCreator.createEntityModelCompanyDTO());
-        CollectionModel<EntityModel<CompanyDTO>> collectionModel = CollectionModel.of(entityModels);
-        EntityModel<CompanyDTO> entityModelCompanyDto = CompanyDTOCreator.createEntityModelCompanyDTO();
+        List<EntityModel<CompanyResponse>> entityModels = new ArrayList<>();
+        entityModels.add(CompanyDTOCreator.createEntityModelCompanyResponse());
+        CollectionModel<EntityModel<CompanyResponse>> collectionModel = CollectionModel.of(entityModels);
+        EntityModel<CompanyResponse> entityModelCompanyDto = CompanyDTOCreator.createEntityModelCompanyResponse();
 
-        PagedModel<EntityModel<CompanyDTO>> companyPage = CompanyDTOCreator.createPageDModelCompanyDTO();
+        PagedModel<EntityModel<CompanyResponse>> companyPage = CompanyDTOCreator.createPageDModelCompanyDTO();
 
         BDDMockito.when(companyServiceMock.listCompanies(ArgumentMatchers.any())).thenReturn(companyPage);
 
@@ -53,11 +54,11 @@ class CompanyControllerTest {
         BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
                 .thenReturn(collectionModel);
 
-        BDDMockito.when(companyServiceMock.saveCompany(ArgumentMatchers.any(CompanyDTO.class)))
+        BDDMockito.when(companyServiceMock.saveCompany(ArgumentMatchers.any(CompanyRequest.class)))
                 .thenReturn(entityModelCompanyDto);
 
         BDDMockito.when(companyServiceMock.updateCompanyById(ArgumentMatchers.anyLong()
-                ,ArgumentMatchers.any(CompanyDTO.class))).thenReturn(entityModelCompanyDto);
+                ,ArgumentMatchers.any(CompanyRequest.class))).thenReturn(entityModelCompanyDto);
 
         BDDMockito.doNothing().when(companyServiceMock).deleteCompanyById(ArgumentMatchers.anyLong());
         BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong()))
@@ -67,8 +68,8 @@ class CompanyControllerTest {
     @Test
     @DisplayName("List returns PagedModel of CompanyDTO when successful")
     void listCompanies_ReturnPageofCompanyDto_WhenSuccessful() {
-        PagedModel<EntityModel<CompanyDTO>> companyPage = companyController.listCompanies(null).getBody();
-        String nameCompany = CompanyDTOCreator.createCompanyDTO().getName();
+        PagedModel<EntityModel<CompanyResponse>> companyPage = companyController.listCompanies(null).getBody();
+        String nameCompany = CompanyDTOCreator.createCompanyRequest().getName();
 
         Assertions.assertThat(companyPage).isNotNull();
 
@@ -82,9 +83,9 @@ class CompanyControllerTest {
     @Test
     @DisplayName("getCompanyById returns model of companyDTO when successful")
     void getCompanyById_ReturnEntityModelOfCompanyDto_WhenSuccessfull() {
-        EntityModel<CompanyDTO> companyDTOModel = companyController.getCompanyById(1).getBody();
+        EntityModel<CompanyResponse> companyDTOModel = companyController.getCompanyById(1).getBody();
 
-        EntityModel<CompanyDTO> companyForTest = CompanyDTOCreator.createEntityModelCompanyDTO();
+        EntityModel<CompanyResponse> companyForTest = CompanyDTOCreator.createEntityModelCompanyResponse();
 
         Assertions.assertThat(companyDTOModel).isNotNull();
 
@@ -97,9 +98,9 @@ class CompanyControllerTest {
     @Test
     @DisplayName("GetByName returns a collection model of companyDTO when successful")
     void getByName_ReturnCollectionModelOfCompanyDto_WhenSuccessful() {
-       CollectionModel<EntityModel<CompanyDTO>> companies = companyController.getByName("company").getBody();
+       CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
 
-       EntityModel<CompanyDTO> company = EntityModel.of(CompanyDTOCreator.createCompanyDTO());
+       EntityModel<CompanyRequest> company = EntityModel.of(CompanyDTOCreator.createCompanyRequest());
 
        Assertions.assertThat(companies).isNotNull().isNotEmpty().hasSize(1);
 
@@ -112,7 +113,7 @@ class CompanyControllerTest {
     void getByName_ReturnEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
         BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
                 .thenReturn(CollectionModel.empty());
-        CollectionModel<EntityModel<CompanyDTO>> companies = companyController.getByName("company").getBody();
+        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
 
         Assertions.assertThat(companies).isNotNull().isEmpty();
     }
@@ -120,8 +121,8 @@ class CompanyControllerTest {
     @Test
     @DisplayName("saveCompany returns an entity model of companyDTO when successful")
     void saveCompany_ReturnEntityModelOfCompanyDTO_WhenSuccessful() {
-        EntityModel<CompanyDTO> companyDTOExpected = CompanyDTOCreator.createEntityModelCompanyDTO();
-        EntityModel<CompanyDTO> companyDto = companyController.saveCompany(CompanyDTOCreator.createCompanyDTO());
+        EntityModel<CompanyResponse> companyDTOExpected = CompanyDTOCreator.createEntityModelCompanyResponse();
+        EntityModel<CompanyResponse> companyDto = companyController.saveCompany(CompanyDTOCreator.createCompanyRequest());
 
         Assertions.assertThat(companyDto)
                 .isNotNull()
@@ -131,11 +132,14 @@ class CompanyControllerTest {
     @Test
     @DisplayName("UpdateCompanyById returns a altered companyDTO")
     void updateCompanyById_ReturnEntityModelOfCompanyDto_WhenSuccessful() {
-        EntityModel<CompanyDTO> companyDTOUpdated = companyController
-                .updateCompanyById(1l,CompanyDTOCreator.createCompanyDTO()).getBody();
+        Long companyExpected = 1l;
+        EntityModel<CompanyResponse> companyDTOUpdated = companyController
+                .updateCompanyById(companyExpected,CompanyDTOCreator.createCompanyRequest()).getBody();
 
-        Assertions.assertThat(companyDTOUpdated).isNotNull()
-                .isEqualTo(EntityModel.of(CompanyDTOCreator.createCompanyDTO()));
+        Assertions.assertThat(companyDTOUpdated).isNotNull();
+        Assertions.assertThat(companyDTOUpdated.getLinks()).isNotNull().isNotEmpty();
+        Assertions.assertThat(companyDTOUpdated.getContent().getId())
+                .isEqualTo(companyExpected);
 
     }
     @Test

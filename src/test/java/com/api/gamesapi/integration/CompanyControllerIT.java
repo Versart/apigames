@@ -1,6 +1,7 @@
 package com.api.gamesapi.integration;
 
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
+import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.api.model.LoginRequest;
 import com.api.gamesapi.domain.model.Company;
@@ -51,7 +52,7 @@ public class CompanyControllerIT {
 
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
         String url = "/companies";
-        ResponseEntity<PagedModel<EntityModel<CompanyDTO>>>
+        ResponseEntity<PagedModel<EntityModel<CompanyResponse>>>
                 exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(
                         null,httpHeaders
                 ),
@@ -83,7 +84,7 @@ public class CompanyControllerIT {
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
         Long idCompanyExpected = companySaved.getId();
         String url = "/companies/{id}";
-        ResponseEntity<EntityModel<CompanyDTO>>
+        ResponseEntity<EntityModel<CompanyResponse>>
                 exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(
                         null,httpHeaders
                 )
@@ -110,7 +111,7 @@ public class CompanyControllerIT {
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
         String nameExpected = companySaved.getName();
         String url = String.format("/companies/find?name=%s", nameExpected);
-        ResponseEntity<CollectionModel<EntityModel<CompanyDTO>>> exchange = testRestTemplate
+        ResponseEntity<CollectionModel<EntityModel<CompanyRequest>>> exchange = testRestTemplate
                 .exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders),
                         new ParameterizedTypeReference<>() {
                         });
@@ -137,7 +138,7 @@ public class CompanyControllerIT {
 
         String nameExpected = "";
         String url = String.format("/companies/find?name=%s", nameExpected);
-        ResponseEntity<CollectionModel<EntityModel<CompanyDTO>>> exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders), new ParameterizedTypeReference<>() {
+        ResponseEntity<CollectionModel<EntityModel<CompanyRequest>>> exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders), new ParameterizedTypeReference<>() {
         });
 
         Assertions.assertThat(exchange).isNotNull();
@@ -154,9 +155,9 @@ public class CompanyControllerIT {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization","Bearer " + token);
 
-        CompanyDTO companyToBeSaved = CompanyDTOCreator.createCompanyDTO();
+        CompanyRequest companyToBeSaved = CompanyDTOCreator.createCompanyRequest();
         String url = "/companies";
-        ResponseEntity<EntityModel<CompanyDTO>> exchange = testRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(companyToBeSaved,httpHeaders),
+        ResponseEntity<EntityModel<CompanyResponse>> exchange = testRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(companyToBeSaved,httpHeaders),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -179,9 +180,9 @@ public class CompanyControllerIT {
 
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
         String url = "/companies/{id}";
-        CompanyDTO companyToUpdated = CompanyDTOCreator.createCompanyDTO();
+        CompanyRequest companyToUpdated = CompanyDTOCreator.createCompanyRequest();
         Long idUpdated = companySaved.getId();
-        ResponseEntity<EntityModel<CompanyDTO>> exchange = testRestTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(companyToUpdated,httpHeaders),
+        ResponseEntity<EntityModel<CompanyRequest>> exchange = testRestTemplate.exchange(url, HttpMethod.PUT, new HttpEntity<>(companyToUpdated,httpHeaders),
                 new ParameterizedTypeReference<>() {
                 }, idUpdated);
 

@@ -1,6 +1,7 @@
 package com.api.gamesapi.api.controller;
 
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
+import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 
@@ -33,21 +34,21 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EntityModel<CompanyDTO> saveCompany(@Valid @RequestBody CompanyDTO companyDTO) {
+    public EntityModel<CompanyResponse> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {
         return companyService.saveCompany(companyDTO);
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<CompanyDTO>>> listCompanies(@ParameterObject Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<CompanyResponse>>> listCompanies(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(companyService.listCompanies(pageable));
     }
 
     @GetMapping("/{companyId}")
-    public ResponseEntity<EntityModel<CompanyDTO>> getCompanyById(@PathVariable long companyId) {
+    public ResponseEntity<EntityModel<CompanyResponse>> getCompanyById(@PathVariable long companyId) {
         return ResponseEntity.ok(companyService.searchCompanyById(companyId));
     }
     @GetMapping("/find")
-    public ResponseEntity<CollectionModel<EntityModel<CompanyDTO>>> getByName(@RequestParam String name){
+    public ResponseEntity<CollectionModel<EntityModel<CompanyResponse>>> getByName(@RequestParam String name){
         return ResponseEntity.ok(companyService.findCompanyByName(name));
     }
 
@@ -57,7 +58,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{companyId}")
-    public ResponseEntity<EntityModel<CompanyDTO>> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody CompanyDTO companyDTO){
+    public ResponseEntity<EntityModel<CompanyResponse>> updateCompanyById(@PathVariable long companyId, @Valid @RequestBody CompanyRequest companyDTO){
         return ResponseEntity.ok(companyService.updateCompanyById(companyId,companyDTO));
     }
     @DeleteMapping("/{companyId}")

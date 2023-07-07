@@ -1,7 +1,8 @@
 package com.api.gamesapi.domain.service;
 
 import com.api.gamesapi.api.mapper.CompanyMapper;
-import com.api.gamesapi.api.model.CompanyDTO;
+import com.api.gamesapi.api.model.CompanyRequest;
+import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.model.Company;
@@ -48,7 +49,7 @@ class CompanyServiceTest {
     void setup() {
         Page<Company> companyPage = new PageImpl<>(List.of(CompanyCreator.createValidCompany()));
 
-        PagedModel<EntityModel<CompanyDTO>> pageDModelCompanyDTO = CompanyDTOCreator.createPageDModelCompanyDTO();
+        PagedModel<EntityModel<CompanyResponse>> pageDModelCompanyDTO = CompanyDTOCreator.createPageDModelCompanyDTO();
 
         BDDMockito.when(companyRepositoryMock.findAll(ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(companyPage);
@@ -67,8 +68,8 @@ class CompanyServiceTest {
         BDDMockito.doNothing().when(companyRepositoryMock).deleteById(ArgumentMatchers.anyLong());
 
         BDDMockito.when(companyMapperMock.toModel(ArgumentMatchers.any(Company.class)))
-                .thenReturn(CompanyDTOCreator.createEntityModelCompanyDTO());
-        BDDMockito.when(companyMapperMock.toEntity(ArgumentMatchers.any(CompanyDTO.class)))
+                .thenReturn(CompanyDTOCreator.createEntityModelCompanyResponse());
+        BDDMockito.when(companyMapperMock.toEntity(ArgumentMatchers.any(CompanyRequest.class)))
                 .thenReturn(CompanyCreator.createValidCompany());
         BDDMockito.when(companyMapperMock.toModelPage(ArgumentMatchers.any(Page.class)))
                 .thenReturn(pageDModelCompanyDTO);
@@ -83,9 +84,10 @@ class CompanyServiceTest {
     @Test
     @DisplayName("saveCompany returns company when Successful")
     void saveCompany_ReturnsCompany_WhenSuccessful() {
-        EntityModel<CompanyDTO> companyDTOEntityModel = companyService.saveCompany(CompanyDTOCreator.createCompanyDTO());
+        EntityModel<CompanyResponse> companyDTOEntityModel = companyService.saveCompany(CompanyDTOCreator.createCompanyRequest());
         Assertions.assertThat(companyDTOEntityModel).isNotNull();
-        Assertions.assertThat(companyDTOEntityModel.getContent()).isEqualTo(CompanyDTOCreator.createCompanyDTO());
+        Assertions.assertThat(companyDTOEntityModel.getLinks()).isNotNull().isNotEmpty();
+        Assertions.assertThat(companyDTOEntityModel.getContent().getId()).isNotNull();
     }
 
     @Test
@@ -98,26 +100,29 @@ class CompanyServiceTest {
     @Test
     @DisplayName("SearchCompanyById returns company when successful")
     void searchCompanyById_ReturnsCompany_WhenSuccessful() {
-        EntityModel<CompanyDTO> companyDTOEntityModel = companyService.searchCompanyById(1L);
+        EntityModel<CompanyResponse> companyDTOEntityModel = companyService.searchCompanyById(1L);
 
         Assertions.assertThat(companyDTOEntityModel).isNotNull();
-        Assertions.assertThat(companyDTOEntityModel).isEqualTo(CompanyDTOCreator.createEntityModelCompanyDTO());
+        Assertions.assertThat(companyDTOEntityModel).isEqualTo(CompanyDTOCreator.createEntityModelCompanyResponse());
     }
 
     @Test
     @DisplayName("findCompanyByName returns list of companies when successful")
     void findCompanyByName_ReturnsListOfCompanies_WhenSuccessful() {
-        CollectionModel<EntityModel<CompanyDTO>> companiesByName = companyService.findCompanyByName("");
+        CollectionModel<EntityModel<CompanyResponse>> companiesByName = companyService.findCompanyByName("");
         Assertions.assertThat(companiesByName).isNotNull().isNotEmpty().hasSize(1);
-        Assertions.assertThat(companiesByName).contains(CompanyDTOCreator.createEntityModelCompanyDTO());
+        Assertions.assertThat(companiesByName).contains(CompanyDTOCreator.createEntityModelCompanyResponse());
     }
 
     @Test
     @DisplayName("updateCompanyById returns company when successful")
     void updateCompanyById_ReturnsCompany_WhenSuccessful() {
-        CompanyDTO companyToBeUpdated = CompanyDTOCreator.createCompanyDTO();
-        EntityModel<CompanyDTO> alteredCompany = companyService.updateCompanyById(1L, companyToBeUpdated);
-        Assertions.assertThat(alteredCompany).isNotNull().isEqualTo(EntityModel.of(companyToBeUpdated));
+        Long idExpected = 1l;
+        CompanyRequest companyToBeUpdated = CompanyDTOCreator.createCompanyRequest();
+        EntityModel<CompanyResponse> alteredCompany = companyService.updateCompanyById(idExpected, companyToBeUpdated);
+        Assertions.assertThat(alteredCompany).isNotNull();
+        Assertions.assertThat(alteredCompany.getLinks()).isNotNull().isNotEmpty();
+        Assertions.assertThat(alteredCompany.getContent().getId()).isEqualTo(idExpected);
     }
 
     @Test
@@ -131,9 +136,13 @@ class CompanyServiceTest {
     @Test
     @DisplayName("listCompanies returns list of companies when successful")
     void listCompanies() {
-        PagedModel<EntityModel<CompanyDTO>> pagedModel = companyService.listCompanies(PageRequest.of(1, 1));
+        PagedModel<EntityModel<CompanyResponse>> pagedModel = companyService.listCompanies(PageRequest.of(1, 1));
         Assertions.assertThat(pagedModel).isNotNull().isNotEmpty();
-        Assertions.assertThat(pagedModel).contains(CompanyDTOCreator.createEntityModelCompanyDTO());
+        Assertions.assertThat(pagedModel.getLinks()).isNotNull().isNotEmpty();
+        Assertions.assertThat(pagedModel.getContent().stream().toList()).contains(
+                CompanyDTOCreator.createEntityModelCompanyResponse()
+        );
+        
     }
 
     @Test
