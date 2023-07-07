@@ -4,9 +4,12 @@ import com.api.gamesapi.api.model.CompanyDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -35,7 +38,7 @@ public class CompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<CompanyDTO>>> listCompanies(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<CompanyDTO>>> listCompanies(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(companyService.listCompanies(pageable));
     }
 

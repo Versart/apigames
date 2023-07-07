@@ -43,7 +43,6 @@ public class TokenService {
                     .getSubject();
         } catch (JWTVerificationException exception){
             throw new RuntimeException("Token inválido!");
-            // Invalid signature/claims
         }
     }
 
