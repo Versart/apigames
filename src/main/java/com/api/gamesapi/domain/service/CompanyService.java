@@ -52,7 +52,7 @@ public class CompanyService {
     }
 
     public CollectionModel<EntityModel<CompanyResponse>> findCompanyByName(String name){
-        return companyMapper.toModelList(companyRepository.findByName(name));
+        return companyMapper.toModelList(companyRepository.findByNameContains(name));
     }
 
     public EntityModel<CompanyResponse> updateCompanyById(long companyId, CompanyRequest companyDTO) {

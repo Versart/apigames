@@ -21,7 +21,7 @@ public class CompanyRequest {
     private String name;
 
     @NotNull
-    @Schema(description = "This is the founding date of the company", example = "1889-09-23")
+    @Schema(description = "This is the founding date of the company", type="date",example = "1889-09-23")
     private LocalDate dateOfFoundation;
 
 
