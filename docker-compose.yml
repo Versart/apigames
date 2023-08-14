@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: games
-      MYSQL_PASSWORD: 
+      MYSQL_PASSWORD: password
       MYSQL_DATABASE: games
     ports:
       - "3306:3306"
