@@ -1,6 +1,7 @@
 package com.api.gamesapi.api.exceptionhandler;
 
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
+import com.api.gamesapi.domain.exception.DuplicatedEmailException;
 import com.api.gamesapi.domain.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -34,7 +35,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             String name = ((FieldError) objectError).getField();
             String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
             inputs.add(new Input(name,message));
-
         }
         Problem problem = new Problem();
         problem.setStatusCode(status.value());
@@ -66,5 +66,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex,problem, new HttpHeaders(),httpStatus,webRequest);
     }
 
+    @ExceptionHandler(DuplicatedEmailException.class)
+    public ResponseEntity<Object> handleEmailDuplicated(DuplicatedEmailException ex, WebRequest webRequest) {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        Problem problem = new Problem();
+        problem.setStatusCode(httpStatus.value());
+        problem.setDateTime(OffsetDateTime.now());
+        problem.setMessage(ex.getMessage());
+        return handleExceptionInternal(ex,problem,new HttpHeaders(),httpStatus,webRequest);
+    }
+
+   /* @Nullable
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        Problem problem = new Problem();
+        problem.setStatusCode(httpStatus.value());
+        problem.setDateTime(OffsetDateTime.now());
+        problem.setMessage(ex.getMessage());
+        return this.createResponseEntity(problem, headers, statusCode, request);
+    }*/
 
 }

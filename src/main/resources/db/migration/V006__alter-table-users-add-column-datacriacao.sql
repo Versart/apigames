@@ -1,0 +1,1 @@
+alter table users add column data_criacao datetime;
