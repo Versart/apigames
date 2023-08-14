@@ -11,18 +11,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-<<<<<<< HEAD
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-=======
 import lombok.RequiredArgsConstructor;
 
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
->>>>>>> hateoas
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/companies")
-<<<<<<< HEAD
-@AllArgsConstructor
-public class CompanyController {
-
-
-    private CompanyService companyService;
-
-    @PostMapping
-    public ResponseEntity<CompanyDTO> saveCompany(@Valid @RequestBody CompanyDTO companyDTO) {
-        return new ResponseEntity<>(companyService.saveCompany(companyDTO),HttpStatus.CREATED);
-=======
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearer-key")
 public class CompanyController {
@@ -58,7 +44,6 @@ public class CompanyController {
                      @ApiResponse(description = "When the body is invalid", responseCode = "400")})
     public EntityModel<CompanyResponse> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {
         return companyService.saveCompany(companyDTO);
->>>>>>> hateoas
     }
 
     @GetMapping
