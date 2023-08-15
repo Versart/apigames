@@ -8,9 +8,12 @@ import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.domain.repository.GameRepository;
+import com.api.gamesapi.domain.repository.UserRepository;
 import com.api.gamesapi.util.CompanyCreator;
 import com.api.gamesapi.util.CompanyDTOCreator;
 import com.api.gamesapi.util.GameCreator;
+import com.api.gamesapi.util.UserCreator;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +33,6 @@ import org.springframework.test.context.ActiveProfiles;
 public class CompanyControllerIT {
 
 
-
-
     @Autowired
     private TestRestTemplate testRestTemplate;
 
@@ -41,6 +42,10 @@ public class CompanyControllerIT {
 
     @Autowired
     private GameRepository gameRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+    
 
     @Test
     @DisplayName("listCompanies returns paged of entity model companyDTo when successful")
@@ -245,11 +250,13 @@ public class CompanyControllerIT {
     @BeforeEach
     void setup(){
         companyRepository.deleteAll();
+        userRepository.save(UserCreator.createUserAdmin());
     }
 
     @AfterEach
     void end(){
         companyRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 }
