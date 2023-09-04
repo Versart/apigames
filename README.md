@@ -14,7 +14,36 @@ API Rest Utilizando Spring boot e o MYSQL
 * [Spring Security](https://spring.io/projects/spring-security)
 
 ## API Endpoints
-
+Para fazer requisições, é necessário primeiramente se registrar, e depois fazer login para receber um token, este deve ser enviado em todas requisições.
+### Authentication
+- POST /auth/register
+```
+Example Request
+{
+  "login": "maria",
+  "password": "12345678",
+  "role": "ADMIN"
+}
+```
+```
+Example Response
+{
+  "login": "maria",
+  "dataCriacao": "2023-09-04T23:08:06.982Z"
+}
+```
+- POST /auth/login
+```
+Example Request
+{
+  "login": "maria",
+  "password": "12345678"
+}
+```
+```
+Example Response
+eyJhbGciOiJIUzI1NiIsInR5cCI.............................................
+```
 ### Company 
 - POST /companies
 ```
