@@ -169,3 +169,108 @@ Example Response
 Example Request
 /companies/1
 ```
+### Game
+- POST /games
+```
+Example Request
+{
+  "name": "Contra ",
+  "category": "ACTION",
+  "companyId": 2
+}
+```
+```
+Example Response
+{
+  "name": "Contra ",
+  "companyName": "Nintendoow",
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/games/1"
+    },
+    "All Games": {
+      "href": "http://localhost:8080/games"
+    }
+  }
+}
+```
+- GET /games
+```
+Example Request
+/games
+```
+```
+{
+  "_embedded": {
+    "gameResponseDTOList": [
+      {
+        "name": "Contra ",
+        "companyName": "Nintendoow",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/games/1"
+          },
+          "All Games": {
+            "href": "http://localhost:8080/games"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/games"
+    }
+  }
+}
+```
+- GET /games/{id}
+```
+Example Request
+/games/1
+```
+```
+Example Response
+{
+  "name": "Contra ",
+  "companyName": "Nintendoow",
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/games/1"
+    },
+    "All Games": {
+      "href": "http://localhost:8080/games"
+    }
+  }
+}
+```
+- PUT /games/{id}
+```
+Example Request
+/companies/1
+{
+  "name": "Contra 2",
+  "category": "ACTION",
+  "companyId": 2
+}
+```
+```
+{
+  "name": "Contra 2",
+  "companyName": "Nintendoow",
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/games/1"
+    },
+    "All Games": {
+      "href": "http://localhost:8080/games"
+    }
+  }
+}
+```
+- DELETE /games/{id}
+```
+Example Request
+/games/1
+```
+
