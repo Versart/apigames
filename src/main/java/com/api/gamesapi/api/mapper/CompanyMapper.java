@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -33,7 +34,7 @@ public class CompanyMapper {
 
         return EntityModel.of(modelMapper.map(company,CompanyResponse.class)
                 ,linkTo(methodOn(CompanyController.class).getCompanyById(company.getId())).withSelfRel()
-//                ,linkTo(methodOn(CompanyController.class).listCompanies()).withRel("All Companies")
+                ,linkTo(methodOn(CompanyController.class).listCompanies(PageRequest.of(0, 10))).withRel("All Companies")
                 );
     }
 
@@ -41,7 +42,7 @@ public class CompanyMapper {
         return CollectionModel.of(companies.stream().map(
                 this::toModel
         ).collect(Collectors.toList())
-                //,linkTo(methodOn(CompanyController.class).listCompanies()).withSelfRel()
+                ,linkTo(methodOn(CompanyController.class).listCompanies(PageRequest.of(0, 10))).withSelfRel()
                  );
    }
 
