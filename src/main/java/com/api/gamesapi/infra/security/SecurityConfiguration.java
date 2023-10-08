@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/games","/companies").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()
-                        .requestMatchers("/actuator/info").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
