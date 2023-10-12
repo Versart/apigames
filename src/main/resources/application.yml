@@ -5,13 +5,13 @@ spring:
         password: password
     main:
         allowCircularReferences: true
-#spring.main.allow-circular-references=true
+
 
 springdoc:
     swaggerUi:
         tagsSorter: alpha
         operationsSorter: method
-#springdoc.swagger-ui.operationsSorter = method
+
 
 api:
     security:

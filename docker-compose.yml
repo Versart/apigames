@@ -1,3 +1,9 @@
+version: '3.8'
+x-database-variables:
+  &database-variables
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/games?createDatabaseIfNotExist=true&serverTimezone=UTC
+  SPRING_DATASOURCE_USERNAME: games
+  SPRING_DATASOURCE_PASSWORD: password
 services:
   db:
     image: mysql
@@ -11,6 +17,11 @@ services:
       - "3306:3306"
     volumes:
       - games_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 430m
+
   db_test:
     image: mysql
     container_name: mysql_test
@@ -23,6 +34,10 @@ services:
       - "3307:3306"
     volumes:
       - games_data_test:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 430m
   
   prometheus:
     image: prom/prometheus:latest
@@ -33,11 +48,33 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
+    deploy:
+      resources:
+        limits:
+          memory: 120m
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 180m
+  
+  spring-api-games:
+    image: w35l31/api-games
+    ports:
+      - "8080:8080"
+    environment:
+      <<: *database-variables
+    depends_on:
+       - db
+    deploy:
+      resources:
+        limits:
+          memory: 512m
 volumes:
   games_data:
   games_data_test:
