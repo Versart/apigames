@@ -6,7 +6,7 @@ import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 import com.api.gamesapi.util.CompanyDTOCreator;
-import com.api.gamesapi.util.GameResponseCreator;
+import com.api.gamesapi.util.GameDTOCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,12 +62,12 @@ class CompanyControllerTest {
 
         BDDMockito.doNothing().when(companyServiceMock).deleteCompanyById(ArgumentMatchers.anyLong());
         BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong()))
-                .thenReturn(GameResponseCreator.createCollectionModelGameResponse());
+                .thenReturn(GameDTOCreator.createPagedModelGameResponse());
     }
 
     @Test
     @DisplayName("List returns PagedModel of CompanyDTO when successful")
-    void listCompanies_ReturnPageofCompanyDto_WhenSuccessful() {
+    void listCompanies_ReturnsPagedModelofCompanyDto_WhenSuccessful() {
         PagedModel<EntityModel<CompanyResponse>> companyPage = companyController.listCompanies(null).getBody();
         String nameCompany = CompanyDTOCreator.createCompanyRequest().getName();
 
@@ -82,7 +82,7 @@ class CompanyControllerTest {
 
     @Test
     @DisplayName("getCompanyById returns model of companyDTO when successful")
-    void getCompanyById_ReturnEntityModelOfCompanyDto_WhenSuccessfull() {
+    void getCompanyById_RetursnEntityModelOfCompanyDto_WhenSuccessfull() {
         EntityModel<CompanyResponse> companyDTOModel = companyController.getCompanyById(1).getBody();
 
         EntityModel<CompanyResponse> companyForTest = CompanyDTOCreator.createEntityModelCompanyResponse();
@@ -97,7 +97,7 @@ class CompanyControllerTest {
 
     @Test
     @DisplayName("GetByName returns a collection model of companyDTO when successful")
-    void getByName_ReturnCollectionModelOfCompanyDto_WhenSuccessful() {
+    void getByName_ReturnsCollectionModelOfCompanyDto_WhenSuccessful() {
        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
 
        EntityModel<CompanyRequest> company = EntityModel.of(CompanyDTOCreator.createCompanyRequest());
@@ -110,7 +110,7 @@ class CompanyControllerTest {
 
     @Test
     @DisplayName("getByName returns an empty collection model of companyDTO when company is not found")
-    void getByName_ReturnEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
+    void getByName_ReturnsEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
         BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
                 .thenReturn(CollectionModel.empty());
         CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
@@ -120,7 +120,7 @@ class CompanyControllerTest {
 
     @Test
     @DisplayName("saveCompany returns an entity model of companyDTO when successful")
-    void saveCompany_ReturnEntityModelOfCompanyDTO_WhenSuccessful() {
+    void saveCompany_ReturnsEntityModelOfCompanyDTO_WhenSuccessful() {
         EntityModel<CompanyResponse> companyDTOExpected = CompanyDTOCreator.createEntityModelCompanyResponse();
         EntityModel<CompanyResponse> companyDto = companyController.saveCompany(CompanyDTOCreator.createCompanyRequest());
 
@@ -147,7 +147,7 @@ class CompanyControllerTest {
         CollectionModel<EntityModel<GameResponseDTO>> gamesByCompanyId =
                 companyController.getGamesByCompanyId(1l).getBody();
         Assertions.assertThat(gamesByCompanyId).isNotNull().isNotEmpty();
-        Assertions.assertThat(gamesByCompanyId).contains(GameResponseCreator.createEntityModelGameResponse());
+        Assertions.assertThat(gamesByCompanyId).contains(GameDTOCreator.createEntityModelGameResponse());
     }
 
     @Test

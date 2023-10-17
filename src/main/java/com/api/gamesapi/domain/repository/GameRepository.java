@@ -1,14 +1,18 @@
 package com.api.gamesapi.domain.repository;
 
 import com.api.gamesapi.domain.model.Game;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game,Long> {
     boolean existsById(Long gameId);
 
-    List<Game> findByCompanyId(Long companyId);
+    Page<Game> findByCompanyId(Long companyId,Pageable pageable);
 }

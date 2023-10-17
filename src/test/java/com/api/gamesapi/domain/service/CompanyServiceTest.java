@@ -9,7 +9,7 @@ import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.util.CompanyCreator;
 import com.api.gamesapi.util.CompanyDTOCreator;
-import com.api.gamesapi.util.GameResponseCreator;
+import com.api.gamesapi.util.GameDTOCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +78,7 @@ class CompanyServiceTest {
         );
         BDDMockito.doNothing().when(companyRepositoryMock).deleteById(ArgumentMatchers.anyLong());
         BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong()))
-                .thenReturn(GameResponseCreator.createCollectionModelGameResponse());
+                .thenReturn(GameDTOCreator.createPagedModelGameResponse());
     }
 
     @Test
@@ -150,7 +150,7 @@ class CompanyServiceTest {
     void getGamesOfCompany_ReturnsListOfComapnyGames_WhenSuccessful() {
         CollectionModel<EntityModel<GameResponseDTO>> gamesOfCompany = companyService.getGamesOfCompany(1l);
         Assertions.assertThat(gamesOfCompany).isNotNull().isNotEmpty();
-        Assertions.assertThat(gamesOfCompany).contains(GameResponseCreator.createEntityModelGameResponse());
+        Assertions.assertThat(gamesOfCompany).contains(GameDTOCreator.createEntityModelGameResponse());
     }
     @Test
     @DisplayName("getGamesOfCompany throws companyNotFoundException when company is not found")

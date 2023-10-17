@@ -10,8 +10,11 @@ import com.api.gamesapi.domain.repository.CompanyRepository;
 import com.api.gamesapi.domain.repository.GameRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,12 +31,14 @@ public class GameService {
 
 
 
-    public CollectionModel<EntityModel<GameResponseDTO>> listGames() {
-        return gameMapper.toModelResponseList(gameRepository.findAll());
+    public PagedModel<EntityModel<GameResponseDTO>> getAllGames(Pageable pageable) {
+        return gameMapper.toPagedModel(gameRepository.findAll(pageable));
     }
 
-    public CollectionModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId){
-        return gameMapper.toModelResponseList(gameRepository.findByCompanyId(companyId));
+
+    public PagedModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId){
+        Pageable pageable = Pageable.ofSize(10);
+        return gameMapper.toPagedModel(gameRepository.findByCompanyId(companyId, pageable));
     }
 
     @Transactional

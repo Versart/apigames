@@ -7,8 +7,11 @@ import com.api.gamesapi.domain.service.GameService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,8 @@ public class GameController {
     private final GameService gameService;
 
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> listGames() {
-
-        return ResponseEntity.ok(gameService.listGames());
+    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(Pageable pageable) {
+        return ResponseEntity.ok(gameService.getAllGames(pageable));
     }
 
     @GetMapping("/{gameId}")
