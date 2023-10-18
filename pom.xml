@@ -10,12 +10,12 @@
     </parent>
     <groupId>com.api</groupId>
     <artifactId>games-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>games-api</name>
     <description>games-api</description>
     <properties>
         <java.version>17</java.version>
-        <docker.repo.url>registry.hub.docker.com/w35l31</docker.repo.url>
+        <docker.repo.url>w35l31</docker.repo.url>
         <docker.repo.project>api-games</docker.repo.project>
         <docker.image.name>${docker.repo.url}/${docker.repo.project}</docker.image.name>
     </properties>
