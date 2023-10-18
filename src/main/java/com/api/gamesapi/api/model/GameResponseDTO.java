@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class GameResponseDTO {
 
-
+    private Long id;
 
     private String name;
 

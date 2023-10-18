@@ -66,7 +66,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("List returns PagedModel of CompanyDTO when successful")
+    @DisplayName("listCompanies returns PagedModel of CompanyResponse when successful")
     void listCompanies_ReturnsPagedModelofCompanyDto_WhenSuccessful() {
         PagedModel<EntityModel<CompanyResponse>> companyPage = companyController.listCompanies(null).getBody();
         String nameCompany = CompanyDTOCreator.createCompanyRequest().getName();
@@ -81,7 +81,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("getCompanyById returns model of companyDTO when successful")
+    @DisplayName("getCompanyById returns EntityModel of CompanyResponse when successful")
     void getCompanyById_RetursnEntityModelOfCompanyDto_WhenSuccessfull() {
         EntityModel<CompanyResponse> companyDTOModel = companyController.getCompanyById(1).getBody();
 
@@ -96,7 +96,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("GetByName returns a collection model of companyDTO when successful")
+    @DisplayName("GetByName returns a CollectionModel of CompanyResponse when successful")
     void getByName_ReturnsCollectionModelOfCompanyDto_WhenSuccessful() {
        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
 
@@ -109,7 +109,7 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("getByName returns an empty collection model of companyDTO when company is not found")
+    @DisplayName("getByName returns an empty CollectionModel of companyResponse when company is not found")
     void getByName_ReturnsEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
         BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
                 .thenReturn(CollectionModel.empty());
@@ -119,10 +119,10 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("saveCompany returns an entity model of companyDTO when successful")
+    @DisplayName("saveCompany returns an EntityModel of CompanyResponse when successful")
     void saveCompany_ReturnsEntityModelOfCompanyDTO_WhenSuccessful() {
         EntityModel<CompanyResponse> companyDTOExpected = CompanyDTOCreator.createEntityModelCompanyResponse();
-        EntityModel<CompanyResponse> companyDto = companyController.saveCompany(CompanyDTOCreator.createCompanyRequest());
+        EntityModel<CompanyResponse> companyDto = companyController.saveCompany(CompanyDTOCreator.createCompanyRequest()).getBody();
 
         Assertions.assertThat(companyDto)
                 .isNotNull()
@@ -130,8 +130,8 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("UpdateCompanyById returns a altered companyDTO")
-    void updateCompanyById_ReturnEntityModelOfCompanyDto_WhenSuccessful() {
+    @DisplayName("UpdateCompanyById returns a EntityModel of companyResponse when successful")
+    void updateCompanyById_ReturnsEntityModelOfCompanyDto_WhenSuccessful() {
         Long companyExpected = 1l;
         EntityModel<CompanyResponse> companyDTOUpdated = companyController
                 .updateCompanyById(companyExpected,CompanyDTOCreator.createCompanyRequest()).getBody();
@@ -143,7 +143,8 @@ class CompanyControllerTest {
 
     }
     @Test
-    void getGamesByCompanyId_ReturnCollectionEntityModelOfGamesResponse_WhenSuccessful() {
+    @DisplayName("getGamesByCompanyId returns CollectionEntityModel of GameResponse when successful")
+    void getGamesByCompanyId_ReturnsCollectionEntityModelOfGamesResponse_WhenSuccessful() {
         CollectionModel<EntityModel<GameResponseDTO>> gamesByCompanyId =
                 companyController.getGamesByCompanyId(1l).getBody();
         Assertions.assertThat(gamesByCompanyId).isNotNull().isNotEmpty();
@@ -151,8 +152,8 @@ class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("deleteCompanyById removes companyDTO when successful")
-    void deleteCompanyById_DeleteCompany_WhenSuccessful() {
+    @DisplayName("deleteCompanyById removes company when successful")
+    void deleteCompanyById_DeletesCompany_WhenSuccessful() {
         Assertions.assertThatCode(() -> companyController.deleteCompanyById(1l) )
                 .doesNotThrowAnyException();
 

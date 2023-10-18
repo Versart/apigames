@@ -34,11 +34,9 @@ public class GameController {
         return ResponseEntity.ok(gameService.searchGameById(gameId));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public EntityModel<GameResponseDTO> saveGame(@Valid @RequestBody GameRequestDTO game) {
-
-        return gameService.saveGame(game);
+    public ResponseEntity<EntityModel<GameResponseDTO>> saveGame(@Valid @RequestBody GameRequestDTO game) {
+        return new ResponseEntity<>(gameService.saveGame(game),HttpStatus.CREATED);
     }
 
     @PutMapping("/{gameId}")
@@ -48,11 +46,8 @@ public class GameController {
 
    @DeleteMapping("/{gameId}")
     public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
-        if(gameService.gameExists(gameId)){
-            gameService.deleteGameById(gameId);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        gameService.deleteGameById(gameId);
+        return ResponseEntity.noContent().build();
    }
 
 }

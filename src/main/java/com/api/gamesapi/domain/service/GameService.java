@@ -50,9 +50,12 @@ public class GameService {
                 }
         ).orElseThrow(() -> new CompanyNotFoundException("Company not found!"));
     }
+
     @Transactional
     public void deleteGameById(long gameId) {
-        gameRepository.deleteById(gameId);
+        if(gameExists(gameId)){
+            gameRepository.deleteById(gameId);
+        }
     }
 
     public EntityModel<GameResponseDTO> searchGameById(Long gameId) {

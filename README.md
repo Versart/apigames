@@ -13,6 +13,7 @@ API Rest Utilizando Spring boot e o MYSQL
 * [Spring HATEOAS](https://spring.io/projects/spring-hateoas)
 * [Spring Security](https://spring.io/projects/spring-security)
 * [Prometheus](https://prometheus.io/)
+* [Jib](https://github.com/GoogleContainerTools/jib)
 ## API Endpoints
 Para fazer requisições, é necessário primeiramente se registrar, e depois fazer login para receber um token, este deve ser enviado em todas requisições.
 ### Authentication

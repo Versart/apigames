@@ -38,12 +38,11 @@ public class CompanyController {
 
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Saves a company",tags = "Company",
         responses = {@ApiResponse(description = "Successful operation", responseCode = "201"),
                      @ApiResponse(description = "When the body is invalid", responseCode = "400")})
-    public EntityModel<CompanyResponse> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {
-        return companyService.saveCompany(companyDTO);
+    public ResponseEntity<EntityModel<CompanyResponse>> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {
+        return new ResponseEntity<>(companyService.saveCompany(companyDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
