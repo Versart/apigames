@@ -11,4 +11,12 @@ public class GameCreator {
                 .name("Jogo Teste")
                 .build();
     }
+    public static Game createValidGame() {
+        return Game.builder()
+                .id(1l)
+                .category(Category.RPG)
+                .name("Jogo Teste")
+                .company(CompanyCreator.createValidCompany())
+                .build();
+    }
 }

@@ -82,7 +82,7 @@ public class GameService {
 
     }
 
-    public boolean gameExists(Long gameId) {
+    public boolean gameExists(Long gameId) throws NotFoundException{
         if (gameRepository.existsById(gameId))
             return true;
         throw new NotFoundException("Game not found!");

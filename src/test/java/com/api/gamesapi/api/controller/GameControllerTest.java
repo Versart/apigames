@@ -84,7 +84,7 @@ public class GameControllerTest {
     }
 
     @Test
-    @DisplayName("getGameById ")
+    @DisplayName("getGameById throws NotFoundException when game is not found")
     void getGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
         BDDMockito.when(gameService.searchGameById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
 

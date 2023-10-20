@@ -8,7 +8,7 @@ public class CompanyCreator {
 
     public static Company createCompanyToBeSaved() {
         return Company.builder().
-                name("Companhia Teste X")
+                name("Nintendo")
                 .dateOfFoundation(LocalDate.now())
                 .build();
     }
@@ -16,7 +16,7 @@ public class CompanyCreator {
     public static Company createValidCompany() {
         return Company.builder()
                 .id(1l)
-                .name("Companhia Teste X")
+                .name("Nintendo")
                 .dateOfFoundation(LocalDate.now())
                 .build();
     }

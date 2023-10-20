@@ -92,7 +92,7 @@ class CompanyServiceTest {
 
     @Test
     @DisplayName("DeleteCompanyById remove company when Successful")
-    void deleteCompanyById_RemoveCompany_WhenSuccessful() {
+    void deleteCompanyById_RemovesCompany_WhenSuccessful() {
         Assertions.assertThatCode(() -> companyService.deleteCompanyById(1L))
                 .doesNotThrowAnyException();
     }
