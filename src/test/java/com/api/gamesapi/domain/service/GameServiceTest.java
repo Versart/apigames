@@ -19,11 +19,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import com.api.gamesapi.api.mapper.GameMapper;
 import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
+import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.model.Game;
 import com.api.gamesapi.domain.repository.CompanyRepository;
@@ -157,6 +159,18 @@ public class GameServiceTest {
     }
 
     @Test
+    @DisplayName("deleteGameById throws NotFoundException when game is not found")
+    void deleteGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        BDDMockito.when(gameRepository.existsById(ArgumentMatchers.anyLong()))
+            .thenReturn(false);
+        
+        Assertions.assertThatExceptionOfType(NotFoundException.class)
+            .isThrownBy(() -> gameService.deleteGameById(1l))
+            .withMessage("Game not found!");
+    }
+
+
+    @Test
     @DisplayName("searchGameById returns EntityModel of GameResponse when successful")
     void searchGameById_ReturnsEntityModelOfGameResponse_WhenSuccessful() {
         Long idExpected = GameCreator.createValidGame().getId();
@@ -166,6 +180,17 @@ public class GameServiceTest {
         Assertions.assertThat(game).isNotNull();
 
         Assertions.assertThat(game.getContent().getId()).isNotNull().isEqualTo(idExpected);
+    }
+
+    @Test
+    @DisplayName("searchGameById throws NotFoundException when game is not found")
+    void searchGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        BDDMockito.when(gameRepository.findById(ArgumentMatchers.anyLong()))
+            .thenReturn(Optional.empty());
+        
+        Assertions.assertThatExceptionOfType(NotFoundException.class)
+            .isThrownBy(() -> gameService.searchGameById(1l))
+            .withMessage("Game not found!"); 
     }
 
     @Test
@@ -183,6 +208,33 @@ public class GameServiceTest {
     }
 
     @Test
+    @DisplayName("updateGameById throws CompanyNotFoundException when the Company of the Game is not found")
+    void updateGameById_ThrowsCompanyNotFoundException_WhenTheCompanyOfTheGameIsNotFound() {
+        BDDMockito.when(companyRepository.findById(ArgumentMatchers.anyLong()))
+            .thenReturn(Optional.empty());
+
+        GameRequestDTO gameTobeUpdated = GameDTOCreator.createAlteredGameRequest();
+        
+        Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
+            .isThrownBy(() -> gameService.updateGameById(1l, gameTobeUpdated))
+            .withMessage("Company not found!");
+    }
+
+    @Test
+    @DisplayName("updateGameById throws NotFoundException when game is not found")
+    void updateGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        BDDMockito.when(gameRepository.findById(ArgumentMatchers.anyLong()))
+            .thenReturn(Optional.empty());
+
+        GameRequestDTO gameTobeUpdated = GameDTOCreator.createAlteredGameRequest();
+        
+        Assertions.assertThatExceptionOfType(NotFoundException.class)
+            .isThrownBy(() -> gameService.updateGameById(1l, gameTobeUpdated))
+            .withMessage("Game not found!");
+    }
+
+
+    @Test
     @DisplayName("gameExists returns true when successful")
     void gameExists_ReturnsTrue_WhenSuccessful() {
         Game game = GameCreator.createValidGame();
@@ -190,6 +242,17 @@ public class GameServiceTest {
         Boolean gameExists = gameService.gameExists(game.getId());
 
         Assertions.assertThat(gameExists).isTrue();
+    }
+
+    @Test
+    @DisplayName("gameExists throws NotFoundException when Game is not found")
+    void gameExists_ThrowsNotFoundException_WhenGameIsNotFound() {
+        BDDMockito.when(gameRepository.existsById(ArgumentMatchers.anyLong()))
+            .thenReturn(false);
+
+        Assertions.assertThatExceptionOfType(NotFoundException.class)
+            .isThrownBy(() -> gameService.gameExists(1l))
+            .withMessage("Game not found!");
     }
 
 }
