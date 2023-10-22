@@ -152,7 +152,9 @@ class CompanyServiceTest {
     @DisplayName("getGamesOfCompany returns list of company games when successful")
     void getGamesOfCompany_ReturnsListOfComapnyGames_WhenSuccessful() {
         CollectionModel<EntityModel<GameResponseDTO>> gamesOfCompany = companyService.getGamesOfCompany(1l, PageRequest.of(0, 1));
+        
         Assertions.assertThat(gamesOfCompany).isNotNull().isNotEmpty();
+
         Assertions.assertThat(gamesOfCompany).contains(GameDTOCreator.createEntityModelGameResponse());
     }
     @Test

@@ -8,11 +8,13 @@ import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.repository.CompanyRepository;
+
+import ch.qos.logback.classic.Logger;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
@@ -41,8 +43,9 @@ public class CompanyService {
     public void deleteCompanyById(long companyId) {
         if(companyRepository.existsById(companyId))
             companyRepository.deleteById(companyId);
-        else
+        else{
             throw new NotFoundException("Company not found!");
+        }
     }
 
     public EntityModel<CompanyResponse> searchCompanyById(Long companyId) {
