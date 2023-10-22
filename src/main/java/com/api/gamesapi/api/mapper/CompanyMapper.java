@@ -44,6 +44,7 @@ public class CompanyMapper {
         ).collect(Collectors.toList())
                 ,linkTo(methodOn(CompanyController.class).listCompanies(PageRequest.of(0, 10))).withSelfRel()
                  );
+        
    }
 
     public PagedModel<EntityModel<CompanyResponse>> toModelPage(Page pageCompany) {

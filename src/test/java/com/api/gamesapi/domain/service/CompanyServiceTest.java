@@ -77,7 +77,7 @@ class CompanyServiceTest {
                 CompanyDTOCreator.createCollectionModelCompanyDTO()
         );
         BDDMockito.doNothing().when(companyRepositoryMock).deleteById(ArgumentMatchers.anyLong());
-        BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(GameDTOCreator.createPagedModelGameResponse());
     }
 
@@ -103,14 +103,17 @@ class CompanyServiceTest {
         EntityModel<CompanyResponse> companyDTOEntityModel = companyService.searchCompanyById(1L);
 
         Assertions.assertThat(companyDTOEntityModel).isNotNull();
+        
         Assertions.assertThat(companyDTOEntityModel).isEqualTo(CompanyDTOCreator.createEntityModelCompanyResponse());
     }
 
     @Test
     @DisplayName("findCompanyByName returns list of companies when successful")
     void findCompanyByName_ReturnsListOfCompanies_WhenSuccessful() {
-        CollectionModel<EntityModel<CompanyResponse>> companiesByName = companyService.findCompanyByName("");
+        PagedModel<EntityModel<CompanyResponse>> companiesByName = companyService.findCompanyByName("",PageRequest.of(0, 1));
+        
         Assertions.assertThat(companiesByName).isNotNull().isNotEmpty().hasSize(1);
+        
         Assertions.assertThat(companiesByName).contains(CompanyDTOCreator.createEntityModelCompanyResponse());
     }
 
@@ -148,16 +151,16 @@ class CompanyServiceTest {
     @Test
     @DisplayName("getGamesOfCompany returns list of company games when successful")
     void getGamesOfCompany_ReturnsListOfComapnyGames_WhenSuccessful() {
-        CollectionModel<EntityModel<GameResponseDTO>> gamesOfCompany = companyService.getGamesOfCompany(1l);
+        CollectionModel<EntityModel<GameResponseDTO>> gamesOfCompany = companyService.getGamesOfCompany(1l, PageRequest.of(0, 1));
         Assertions.assertThat(gamesOfCompany).isNotNull().isNotEmpty();
         Assertions.assertThat(gamesOfCompany).contains(GameDTOCreator.createEntityModelGameResponse());
     }
     @Test
     @DisplayName("getGamesOfCompany throws companyNotFoundException when company is not found")
     void getGamesOfCompany_ThrowsCompanyNotFoundException_WhenCompanyIsNotFound() {
-        BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameServiceMock.listGamesByCompanyId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
                 .thenThrow(CompanyNotFoundException.class);
         Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
-                .isThrownBy(() -> companyService.getGamesOfCompany(1l));
+                .isThrownBy(() -> companyService.getGamesOfCompany(1l, PageRequest.of(0, 1)));
     }
 }

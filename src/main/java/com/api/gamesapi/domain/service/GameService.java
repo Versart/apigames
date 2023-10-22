@@ -36,8 +36,7 @@ public class GameService {
     }
 
 
-    public PagedModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId){
-        Pageable pageable = Pageable.ofSize(10);
+    public PagedModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId, Pageable pageable){
         return gameMapper.toPagedModel(gameRepository.findByCompanyId(companyId, pageable));
     }
 

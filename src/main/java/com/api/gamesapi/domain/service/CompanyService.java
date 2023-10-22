@@ -51,8 +51,8 @@ public class CompanyService {
         ).orElseThrow(() -> new NotFoundException("Company not found!"));
     }
 
-    public CollectionModel<EntityModel<CompanyResponse>> findCompanyByName(String name){
-        return companyMapper.toModelList(companyRepository.findByNameContains(name));
+    public PagedModel<EntityModel<CompanyResponse>> findCompanyByName(String name, Pageable pageable){
+        return companyMapper.toModelPage(companyRepository.findByNameContains(name, pageable));
     }
 
     public EntityModel<CompanyResponse> updateCompanyById(long companyId, CompanyRequest companyDTO) {
@@ -76,9 +76,9 @@ public class CompanyService {
         return companyMapper.toModelPage(companyPage);
     }
 
-    public CollectionModel<EntityModel<GameResponseDTO>> getGamesOfCompany(Long companyId) {
+    public PagedModel<EntityModel<GameResponseDTO>> getGamesOfCompany(Long companyId, Pageable pageable) {
         if(companyExists(companyId)){
-            return gameService.listGamesByCompanyId(companyId);
+            return gameService.listGamesByCompanyId(companyId, pageable);
         }
         throw new CompanyNotFoundException("Company not found");
     }

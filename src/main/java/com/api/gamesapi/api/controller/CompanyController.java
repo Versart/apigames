@@ -6,18 +6,14 @@ import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.service.CompanyService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -63,16 +59,16 @@ public class CompanyController {
     @GetMapping("/find")
     @Operation(summary = "Gets companies which contains in the name, the name searched",tags = "Company"
     ,responses = {@ApiResponse(description = "Successful operation", responseCode = "200")})
-    public ResponseEntity<CollectionModel<EntityModel<CompanyResponse>>> getByName(@Schema(description = "this is company's name", type = "string") @RequestParam String name){
-        return ResponseEntity.ok(companyService.findCompanyByName(name));
+    public ResponseEntity<PagedModel<EntityModel<CompanyResponse>>> getByName(@Schema(description = "this is company's name", type = "string") @RequestParam String name, @ParameterObject Pageable pageable){
+        return ResponseEntity.ok(companyService.findCompanyByName(name, pageable));
     }
 
     @GetMapping("/{companyId}/games")
     @Operation(summary = "Lists all games of company",tags = "Company", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
         @ApiResponse(description = "When the company does not exists in the database", responseCode = "404")})
-    public ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> getGamesByCompanyId(@Schema(description = "this is company's id", type = "number") @PathVariable Long companyId ){
-       return ResponseEntity.ok(companyService.getGamesOfCompany(companyId));
+    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getGamesByCompanyId(@Schema(description = "this is company's id", type = "number") @PathVariable Long companyId, @ParameterObject Pageable pageable ){
+       return ResponseEntity.ok(companyService.getGamesOfCompany(companyId, pageable));
     }
 
     @PutMapping("/{companyId}")

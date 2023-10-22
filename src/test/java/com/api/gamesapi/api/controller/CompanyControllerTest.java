@@ -16,6 +16,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -38,9 +40,7 @@ class CompanyControllerTest {
 
     @BeforeEach
     void setup() {
-        List<EntityModel<CompanyResponse>> entityModels = new ArrayList<>();
-        entityModels.add(CompanyDTOCreator.createEntityModelCompanyResponse());
-        CollectionModel<EntityModel<CompanyResponse>> collectionModel = CollectionModel.of(entityModels);
+       
         EntityModel<CompanyResponse> entityModelCompanyDto = CompanyDTOCreator.createEntityModelCompanyResponse();
 
         PagedModel<EntityModel<CompanyResponse>> companyPage = CompanyDTOCreator.createPageDModelCompanyDTO();
@@ -51,8 +51,8 @@ class CompanyControllerTest {
                 entityModelCompanyDto
         );
 
-        BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
-                .thenReturn(collectionModel);
+        BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString(), ArgumentMatchers.any(PageRequest.class)))
+                .thenReturn(companyPage);
 
         BDDMockito.when(companyServiceMock.saveCompany(ArgumentMatchers.any(CompanyRequest.class)))
                 .thenReturn(entityModelCompanyDto);
@@ -61,7 +61,7 @@ class CompanyControllerTest {
                 ,ArgumentMatchers.any(CompanyRequest.class))).thenReturn(entityModelCompanyDto);
 
         BDDMockito.doNothing().when(companyServiceMock).deleteCompanyById(ArgumentMatchers.anyLong());
-        BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong()))
+        BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(GameDTOCreator.createPagedModelGameResponse());
     }
 
@@ -98,7 +98,7 @@ class CompanyControllerTest {
     @Test
     @DisplayName("GetByName returns a CollectionModel of CompanyResponse when successful")
     void getByName_ReturnsCollectionModelOfCompanyDto_WhenSuccessful() {
-       CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
+       PagedModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company", PageRequest.of(0, 1)).getBody();
 
        EntityModel<CompanyRequest> company = EntityModel.of(CompanyDTOCreator.createCompanyRequest());
 
@@ -111,9 +111,9 @@ class CompanyControllerTest {
     @Test
     @DisplayName("getByName returns an empty CollectionModel of companyResponse when company is not found")
     void getByName_ReturnsEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
-        BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString()))
-                .thenReturn(CollectionModel.empty());
-        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company").getBody();
+        BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString(), ArgumentMatchers.any(PageRequest.class)))
+                .thenReturn(PagedModel.empty());
+        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company",PageRequest.of(0, 1)).getBody();
 
         Assertions.assertThat(companies).isNotNull().isEmpty();
     }
@@ -145,9 +145,11 @@ class CompanyControllerTest {
     @Test
     @DisplayName("getGamesByCompanyId returns CollectionEntityModel of GameResponse when successful")
     void getGamesByCompanyId_ReturnsCollectionEntityModelOfGamesResponse_WhenSuccessful() {
-        CollectionModel<EntityModel<GameResponseDTO>> gamesByCompanyId =
-                companyController.getGamesByCompanyId(1l).getBody();
+        PagedModel<EntityModel<GameResponseDTO>> gamesByCompanyId =
+                companyController.getGamesByCompanyId(1l,PageRequest.of(0, 1)).getBody();
+        
         Assertions.assertThat(gamesByCompanyId).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(gamesByCompanyId).contains(GameDTOCreator.createEntityModelGameResponse());
     }
 

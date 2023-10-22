@@ -106,7 +106,7 @@ public class GameServiceTest {
     void listGamesByCompanyId_ReturnsPagedModelOfGameResponse_WhenSuccessful() {
         Company company = CompanyCreator.createValidCompany();
         
-        PagedModel<EntityModel<GameResponseDTO>> games = gameService.listGamesByCompanyId(company.getId());
+        PagedModel<EntityModel<GameResponseDTO>> games = gameService.listGamesByCompanyId(company.getId(), PageRequest.of(0, 1));
 
         Assertions.assertThat(games.getContent()).isNotNull().isNotEmpty().hasSize(1);
 
@@ -122,7 +122,7 @@ public class GameServiceTest {
          BDDMockito.when(gameMapper.toPagedModel(ArgumentMatchers.any(Page.class)))
             .thenReturn(PagedModel.empty());
         
-        PagedModel<EntityModel<GameResponseDTO>> games = gameService.listGamesByCompanyId(1l);
+        PagedModel<EntityModel<GameResponseDTO>> games = gameService.listGamesByCompanyId(1l, PageRequest.of(0, 1));
 
         Assertions.assertThat(games.getContent()).isNotNull().isEmpty();
     }
