@@ -66,7 +66,8 @@ class CompanyServiceTest {
         BDDMockito.when(companyRepositoryMock.existsById(ArgumentMatchers.anyLong()))
                 .thenReturn(true);
         BDDMockito.doNothing().when(companyRepositoryMock).deleteById(ArgumentMatchers.anyLong());
-
+        BDDMockito.when(companyRepositoryMock.findByNameContains(ArgumentMatchers.anyString(), ArgumentMatchers.any(PageRequest.class)))
+                .thenReturn(companyPage);
         BDDMockito.when(companyMapperMock.toModel(ArgumentMatchers.any(Company.class)))
                 .thenReturn(CompanyDTOCreator.createEntityModelCompanyResponse());
         BDDMockito.when(companyMapperMock.toEntity(ArgumentMatchers.any(CompanyRequest.class)))
