@@ -29,7 +29,7 @@ public class AuthenticationController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest){
         var userNamePassword = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),loginRequest.getPassword());
         var auth = authenticationManager.authenticate(userNamePassword);
         var token = tokenService.getToken((User) auth.getPrincipal());

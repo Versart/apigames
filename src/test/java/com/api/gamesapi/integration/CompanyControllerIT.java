@@ -48,7 +48,7 @@ public class CompanyControllerIT {
     
 
     @Test
-    @DisplayName("listCompanies returns paged of entity model companyDTo when successful")
+    @DisplayName("listCompanies returns PagedModel of CompanyDTo when successful")
     void listCompanies_ReturnsPageModelOfEntityModelCompanyDTO_WhenSuccessful() {
         LoginRequest loginRequest = new LoginRequest("maria","12345678");
         String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
@@ -57,6 +57,7 @@ public class CompanyControllerIT {
 
         Company companySaved = companyRepository.save(CompanyCreator.createCompanyToBeSaved());
         String url = "/companies";
+
         ResponseEntity<PagedModel<EntityModel<CompanyResponse>>>
                 exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(
                         null,httpHeaders
@@ -65,15 +66,22 @@ public class CompanyControllerIT {
                 });
 
         Assertions.assertThat(exchange).isNotNull();
+
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().map(
                 company -> company.getContent().getId()
         )).contains(companySaved.getId());
+        
         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList()
                 .get(0).getLinks()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList()
                 .get(0).getLinks().toString()).contains("/companies/" + companySaved.getId());
     }
@@ -98,11 +106,16 @@ public class CompanyControllerIT {
 
         Assertions.assertThat(exchange).isNotNull();
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+
         Assertions.assertThat(exchange.getBody()).isNotNull();
+
         Assertions.assertThat(exchange.getBody().getContent()).isNotNull();
+
         Assertions.assertThat(exchange.getBody().getContent().getId()).isEqualTo(idCompanyExpected);
+        
         Assertions.assertThat(exchange.getBody().getLinks()).isNotEmpty().isNotNull();
-        Assertions.assertThat(exchange.getBody().getLinks().toString()).contains("/companies/" + idCompanyExpected);
+        
+        Assertions.assertThat(exchange.getBody().getLinks().toString()).contains(url.replace("/{id}","") + "/"+ idCompanyExpected);
     }
 
     @Test
@@ -122,13 +135,19 @@ public class CompanyControllerIT {
                         });
 
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0).getContent()
                 .getName()).isEqualTo(nameExpected);
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0)
                 .getLinks()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList()
                 .get(0).getLinks().toString()).contains("/companies/" + companySaved.getId());
     }
@@ -147,7 +166,9 @@ public class CompanyControllerIT {
         });
 
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull().isEmpty();
 
     }
@@ -167,10 +188,15 @@ public class CompanyControllerIT {
                 });
 
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getContent()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getContent().getId()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
 
     }
@@ -192,11 +218,17 @@ public class CompanyControllerIT {
                 }, idUpdated);
 
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getContent().getName()).isEqualTo(companyToUpdated.getName());
+        
         Assertions.assertThat(exchange.getBody().getContent().getDateOfFoundation()).isEqualTo(companyToUpdated.getDateOfFoundation());
+        
         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getLinks().toString()).contains("/companies/" + idUpdated);
     }
 
@@ -217,14 +249,22 @@ public class CompanyControllerIT {
         ResponseEntity<CollectionModel<EntityModel<GameResponseDTO>>> exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders),
                 new ParameterizedTypeReference<>() {
                 }, idCompany);
+        
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        
         Assertions.assertThat(exchange.getBody()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isNotEmpty();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0).getContent()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0).getContent().getName()
             ).isEqualTo(gameSaved.getName());
+        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList().get(0).getLinks()).isNotNull();
+        
         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
     }
 
@@ -243,6 +283,7 @@ public class CompanyControllerIT {
         ResponseEntity<Void> exchange = testRestTemplate.exchange(url, HttpMethod.DELETE, new HttpEntity<>(null,httpHeaders), Void.class, idToDelete);
 
         Assertions.assertThat(exchange).isNotNull();
+        
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     }
