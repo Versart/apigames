@@ -8,6 +8,9 @@ import com.api.gamesapi.domain.service.UserService;
 import com.api.gamesapi.infra.security.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
+    Logger logger = LogManager.getLogger(AuthenticationController.class);
+
     private final UserService userService;
 
     private final AuthenticationManager authenticationManager;
@@ -30,6 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest){
+        logger.info("Received request to login");
         var userNamePassword = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),loginRequest.getPassword());
         var auth = authenticationManager.authenticate(userNamePassword);
         var token = tokenService.getToken((User) auth.getPrincipal());
@@ -39,6 +45,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
+        logger.info("Received request to register user");
         return new ResponseEntity<>(userService.saveUser(userRequest), HttpStatus.CREATED);
     }
 }

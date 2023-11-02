@@ -6,6 +6,12 @@ spring:
     main:
         allowCircularReferences: true
 
+logging:
+    level:
+        root: info
+        com:
+            api:
+                gamesapi: info
 
 springdoc:
     swaggerUi:
@@ -17,6 +23,7 @@ api:
     security:
         token:
             secret: ${JWT_TOKEN:12345678}
+
 management:
     endpoints:
         web:

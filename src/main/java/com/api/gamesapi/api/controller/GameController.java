@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -23,13 +25,16 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearer-key")
 public class GameController {
 
+    Logger logger = LogManager.getLogger(GameController.class);
+
     private final GameService gameService;
 
     @GetMapping
     @Operation(summary = "Lists all companies paginated", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200")
     })
-    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(Pageable pageable) { 
+        logger.info("Received request to fetch all games");
         return ResponseEntity.ok(gameService.getAllGames(pageable));
     }
 
@@ -39,6 +44,7 @@ public class GameController {
         @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> getGameById(@PathVariable long gameId){
+        logger.info("Received request to fetch game with id {}", gameId);
         return ResponseEntity.ok(gameService.searchGameById(gameId));
     }
 
@@ -48,6 +54,7 @@ public class GameController {
         @ApiResponse(description = "When the body is invalid", responseCode = "400")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> saveGame(@Valid @RequestBody GameRequestDTO game) {
+        logger.info("Received request to create new game");
         return new ResponseEntity<>(gameService.saveGame(game),HttpStatus.CREATED);
     }
 
@@ -57,6 +64,7 @@ public class GameController {
         @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> updateGameById(@PathVariable long gameId, @Valid @RequestBody GameRequestDTO game) {
+        logger.info("Received request to update game with id {}", gameId);
         return ResponseEntity.ok(gameService.updateGameById(gameId,game));
     }
 
@@ -66,6 +74,7 @@ public class GameController {
         @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
    })
     public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
+        logger.info("Received request to delete game with id {}", gameId);
         gameService.deleteGameById(gameId);
         return ResponseEntity.noContent().build();
    }
