@@ -11,8 +11,9 @@ import com.api.gamesapi.domain.repository.GameRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GameService {
+
+    Logger logger = LogManager.getLogger(GameService.class);
 
     private final GameRepository gameRepository;
 
@@ -32,16 +35,19 @@ public class GameService {
 
 
     public PagedModel<EntityModel<GameResponseDTO>> getAllGames(Pageable pageable) {
+        logger.info("Fetching all games");
         return gameMapper.toPagedModel(gameRepository.findAll(pageable));
     }
 
 
     public PagedModel<EntityModel<GameResponseDTO>> listGamesByCompanyId(Long companyId, Pageable pageable){
+        logger.info("Fetching all games of the company with id {}", companyId);
         return gameMapper.toPagedModel(gameRepository.findByCompanyId(companyId, pageable));
     }
 
     @Transactional
     public EntityModel<GameResponseDTO> saveGame(GameRequestDTO gameRequestDTO) {
+        logger.info("Creating new game");
         return companyRepository.findById(gameRequestDTO.getCompanyId()).map(
                 company -> {
                     Game gameSaved = gameRepository.save(gameMapper.toEntity(gameRequestDTO));
@@ -52,19 +58,21 @@ public class GameService {
 
     @Transactional
     public void deleteGameById(long gameId) {
+        logger.info("Deleting game with id {}", gameId);
         if(gameExists(gameId)){
             gameRepository.deleteById(gameId);
         }
     }
 
     public EntityModel<GameResponseDTO> searchGameById(Long gameId) {
-
+        logger.info("Fetching game with id {}", gameId);
         return gameRepository.findById(gameId).map(
                        gameMapper::toModelResponse
         ).orElseThrow(() -> new NotFoundException("Game not found!"));
     }
 
     public EntityModel<GameResponseDTO> updateGameById(Long gameId, GameRequestDTO gameRequestDTO) {
+        logger.info("Updating game with id {}", gameId);
         return gameMapper.toModelResponse(gameRepository.findById(gameId).map(
                 gameUpdate -> {
                     companyRepository.findById(gameRequestDTO.getCompanyId()).map(
@@ -82,6 +90,7 @@ public class GameService {
     }
 
     public boolean gameExists(Long gameId) throws NotFoundException{
+        logger.info("Verifying if exists game with id {}", gameId);
         if (gameRepository.existsById(gameId))
             return true;
         throw new NotFoundException("Game not found!");
