@@ -53,7 +53,7 @@ public class GameService {
                     Game gameSaved = gameRepository.save(gameMapper.toEntity(gameRequestDTO));
                     return gameMapper.toModelResponse(gameSaved);
                 }
-        ).orElseThrow(() -> new CompanyNotFoundException("Company not found!"));
+        ).orElseThrow(() -> new CompanyNotFoundException(String.format("Company not found with id %d", gameRequestDTO.getCompanyId())));
     }
 
     @Transactional
@@ -68,7 +68,7 @@ public class GameService {
         logger.info("Fetching game with id {}", gameId);
         return gameRepository.findById(gameId).map(
                        gameMapper::toModelResponse
-        ).orElseThrow(() -> new NotFoundException("Game not found!"));
+        ).orElseThrow(() -> new NotFoundException(String.format("Game not found with id %d", gameId)));
     }
 
     public EntityModel<GameResponseDTO> updateGameById(Long gameId, GameRequestDTO gameRequestDTO) {
@@ -82,10 +82,10 @@ public class GameService {
                                 gameUpdate.setCompany(company);
                                 return gameMapper.toModelResponse(gameRepository.save(gameUpdate));
                             }
-                    ).orElseThrow(() -> new CompanyNotFoundException("Company not found!"));
+                    ).orElseThrow(() -> new CompanyNotFoundException(String.format("Company not found with id %d", gameRequestDTO.getCompanyId())));
                     return gameUpdate;
                 }
-        ).orElseThrow(() -> new NotFoundException("Game not found!")));
+        ).orElseThrow(() -> new NotFoundException(String.format("Game not found with id %d", gameId))));
 
     }
 
@@ -93,7 +93,7 @@ public class GameService {
         logger.info("Verifying if exists game with id {}", gameId);
         if (gameRepository.existsById(gameId))
             return true;
-        throw new NotFoundException("Game not found!");
+        throw new NotFoundException(String.format("Game not found with id %d", gameId));
     }
 
 }

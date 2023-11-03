@@ -10,8 +10,6 @@ import com.api.gamesapi.domain.model.Company;
 import com.api.gamesapi.domain.repository.CompanyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -47,7 +45,7 @@ public class CompanyService {
         if(companyRepository.existsById(companyId))
             companyRepository.deleteById(companyId);
         else{
-            throw new NotFoundException("Company not found!");
+            throw new NotFoundException(String.format("Company not found with id %d", companyId));
         }
     }
 
@@ -55,7 +53,7 @@ public class CompanyService {
         logger.info("Fetching company with id {}", companyId);
         return companyRepository.findById(companyId).map(
                      companyMapper::toModel
-        ).orElseThrow(() -> new NotFoundException("Company not found!"));
+        ).orElseThrow(() -> new NotFoundException(String.format("Company not found with id %d", companyId)));
     }
 
     public PagedModel<EntityModel<CompanyResponse>> findCompanyByName(String name, Pageable pageable){
@@ -71,14 +69,14 @@ public class CompanyService {
                     company.setDateOfFoundation(companyDTO.getDateOfFoundation());
                     return companyMapper.toModel(companyRepository.save(company));
                 }
-        ).orElseThrow(() -> new NotFoundException("Company not found"));
+        ).orElseThrow(() -> new NotFoundException(String.format("Company not found with id %d", companyId)));
     }
 
     public boolean companyExists(Long companyId) {
         logger.info("Verifying if exists company with id {}", companyId);
         if(companyRepository.existsById(companyId))
             return true;
-        throw new NotFoundException("Company not found");
+        throw new NotFoundException(String.format("Company not found with id %d", companyId));
     }
 
     public PagedModel<EntityModel<CompanyResponse>> listCompanies(Pageable pageable) {
@@ -92,7 +90,7 @@ public class CompanyService {
         if(companyExists(companyId)){
             return gameService.listGamesByCompanyId(companyId, pageable);
         }
-        throw new CompanyNotFoundException("Company not found");
+        throw new CompanyNotFoundException(String.format("Company not found with id %d", companyId));
     }
 
 }

@@ -32,7 +32,7 @@ public class UserService {
     public UserResponse saveUser(UserRequest userRequest) {
         logger.info("Creating new user");
         if(loginxists(userRequest.getLogin()))
-            throw new DuplicatedEmailException("Email já utilizado!");
+            throw new DuplicatedEmailException(String.format("There is already user with email %s", userRequest.getLogin()));
         String password = new BCryptPasswordEncoder().encode(userRequest.getPassword());
         User userToBeSaved = userMapper.toEntity(userRequest);
         userToBeSaved.setDataCriacao(OffsetDateTime.now());
