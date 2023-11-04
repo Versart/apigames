@@ -8,7 +8,6 @@ import com.api.gamesapi.domain.service.UserService;
 import com.api.gamesapi.infra.security.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;

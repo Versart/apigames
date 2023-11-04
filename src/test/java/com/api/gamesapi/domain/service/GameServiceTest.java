@@ -148,7 +148,7 @@ public class GameServiceTest {
         
         Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
             .isThrownBy(() -> gameService.saveGame(GameDTOCreator.createGameRequest()))
-            .withMessage("Company not found!");
+            .withMessageContaining("Company not found with id");
     }
 
     @Test
@@ -166,7 +166,7 @@ public class GameServiceTest {
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> gameService.deleteGameById(1l))
-            .withMessage("Game not found!");
+            .withMessageContaining("Game not found with id");
     }
 
 
@@ -190,7 +190,7 @@ public class GameServiceTest {
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> gameService.searchGameById(1l))
-            .withMessage("Game not found!"); 
+            .withMessageContaining("Game not found with id"); 
     }
 
     @Test
@@ -217,7 +217,7 @@ public class GameServiceTest {
         
         Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
             .isThrownBy(() -> gameService.updateGameById(1l, gameTobeUpdated))
-            .withMessage("Company not found!");
+            .withMessageContaining("Company not found with id");
     }
 
     @Test
@@ -230,7 +230,7 @@ public class GameServiceTest {
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> gameService.updateGameById(1l, gameTobeUpdated))
-            .withMessage("Game not found!");
+            .withMessageContaining("Game not found with id");
     }
 
 
@@ -252,7 +252,7 @@ public class GameServiceTest {
 
         Assertions.assertThatExceptionOfType(NotFoundException.class)
             .isThrownBy(() -> gameService.gameExists(1l))
-            .withMessage("Game not found!");
+            .withMessageContaining("Game not found with id");
     }
 
 }

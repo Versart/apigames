@@ -48,7 +48,7 @@ public class CompanyControllerIT {
     
 
     @Test
-    @DisplayName("listCompanies returns PagedModel of CompanyDTo when successful")
+    @DisplayName("listCompanies returns PagedModel of CompanyResponse when successful")
     void listCompanies_ReturnsPageModelOfEntityModelCompanyDTO_WhenSuccessful() {
         LoginRequest loginRequest = new LoginRequest("maria","12345678");
         String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);

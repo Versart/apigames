@@ -25,7 +25,7 @@ import com.api.gamesapi.util.GameDTOCreator;
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(SpringExtension.class)
-public class GameControllerTest {
+class GameControllerTest {
 
     @InjectMocks
     private GameController gameController;
