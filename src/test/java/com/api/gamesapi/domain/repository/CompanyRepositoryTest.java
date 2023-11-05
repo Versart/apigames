@@ -31,7 +31,7 @@ class CompanyRepositoryTest {
     public void save_PersistCompany_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
-        Company savedCompany = this.companyRepository.save(companyToBeSaved);
+        Company savedCompany = companyRepository.save(companyToBeSaved);
 
         Assertions.assertThat(savedCompany).isNotNull();
 

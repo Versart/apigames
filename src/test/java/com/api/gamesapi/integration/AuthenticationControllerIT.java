@@ -30,7 +30,7 @@ import com.api.gamesapi.util.LoginCreator;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class AuthenticationControllerIT {
+class AuthenticationControllerIT {
     
     @Autowired
     private TestRestTemplate testRestTemplate;
