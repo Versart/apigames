@@ -3,6 +3,9 @@ package com.api.gamesapi.api.exceptionhandler;
 import com.api.gamesapi.domain.exception.CompanyNotFoundException;
 import com.api.gamesapi.domain.exception.DuplicatedEmailException;
 import com.api.gamesapi.domain.exception.NotFoundException;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,10 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    private MessageSource messageSource;
+    
+    private final MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {

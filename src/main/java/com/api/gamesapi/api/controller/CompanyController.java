@@ -35,7 +35,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    @Operation(summary = "Saves a company",tags = "Company",
+    @Operation(summary = "Creates a new company",tags = "Company",
         responses = {@ApiResponse(description = "Successful operation", responseCode = "201"),
                      @ApiResponse(description = "When the body is invalid", responseCode = "400")})
     public ResponseEntity<EntityModel<CompanyResponse>> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {

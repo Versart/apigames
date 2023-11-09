@@ -30,7 +30,7 @@ public class GameController {
     private final GameService gameService;
 
     @GetMapping
-    @Operation(summary = "Lists all companies paginated", tags = "Game", responses = {
+    @Operation(summary = "Lists all games paginated", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200")
     })
     public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(Pageable pageable) { 
@@ -49,7 +49,7 @@ public class GameController {
     }
 
     @PostMapping
-    @Operation(summary = "saves a game", tags = "Game", responses = {
+    @Operation(summary = "Creates a new game", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "201"),
         @ApiResponse(description = "When the body is invalid", responseCode = "400")
     })

@@ -6,6 +6,9 @@ import com.api.gamesapi.api.model.UserResponse;
 import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.service.UserService;
 import com.api.gamesapi.infra.security.TokenService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +36,9 @@ public class AuthenticationController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
+    @Operation(summary = "Log in", tags = "Authentication", responses = {
+        @ApiResponse(description = "Successful operation", responseCode = "200")
+    })
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest){
         logger.info("Received request to login");
         var userNamePassword = new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),loginRequest.getPassword());
@@ -42,7 +48,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(token);
     }
 
+    
     @PostMapping("/register")
+    @Operation(summary="Creates a new user", tags = "Authentication", responses = {
+        @ApiResponse(description = "Successful operation", responseCode = "201"),
+        @ApiResponse(description = "When there is already user with the same email", responseCode = "409")
+    })
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
         logger.info("Received request to register user");
         return new ResponseEntity<>(userService.saveUser(userRequest), HttpStatus.CREATED);
