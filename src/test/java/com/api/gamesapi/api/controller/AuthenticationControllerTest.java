@@ -34,27 +34,15 @@ class AuthenticationControllerTest {
     @Mock
     private  UserService userService;
 
-    @Mock
-    private  AuthenticationManager authenticationManager;
-
-    @Mock
-    private  TokenService tokenService;
-
-    @Mock
-    private Authentication authentication;
-
     @BeforeEach
     void setup() {
         String token = "shagshg1212hgjsgd";
         User user = UserCreator.createUserAdmin();
         UserResponse userResponse = UserDTOCreator.createUserResponse();
-        BDDMockito.when(authenticationManager.authenticate(ArgumentMatchers.any(UsernamePasswordAuthenticationToken.class)))
-            .thenReturn(authentication);
-        BDDMockito.when(authentication.getPrincipal()).thenReturn(user);
-        BDDMockito.when(tokenService.getToken(ArgumentMatchers.any(User.class)))
-            .thenReturn(token);
         BDDMockito.when(userService.saveUser(ArgumentMatchers.any(UserRequest.class)))
             .thenReturn(userResponse);
+        BDDMockito.when(userService.login(ArgumentMatchers.any(LoginRequest.class)))
+            .thenReturn(token);
     }
 
     @Test
@@ -70,10 +58,8 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("login throws AuthenticationException when authentication fails")
     void login_ThrowsAuthenticationException_WhenAuthenticationFails() {
-        BDDMockito.when(authenticationManager
-            .authenticate(ArgumentMatchers.any(Authentication.class)))
+        BDDMockito.when(userService.login(ArgumentMatchers.any(LoginRequest.class)))
             .thenThrow(AuthenticationFailed.class);
-            
             
         LoginRequest loginRequest = LoginCreator.createLoginRequest();
         
