@@ -43,7 +43,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Token inválido!");
+            throw new JWTVerificationException("Invalid Token!");
         }
     }
 
