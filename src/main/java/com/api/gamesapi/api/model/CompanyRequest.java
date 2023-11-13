@@ -17,7 +17,7 @@ public class CompanyRequest {
 
     @NotNull
     @NotBlank
-    @Schema(description = "This is company's name", example = "Nintendo")
+    @Schema(description = "This is the Company's name", example = "Nintendo")
     private String name;
 
     @NotNull

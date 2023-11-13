@@ -13,15 +13,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Builder
 public class CompanyResponse {
 
+    @Schema(description = "This is the Company's id", example = "1")
     private Long id;
 
     @NotNull
     @NotBlank
-    @Schema(description = "This is company's name", example = "Nintendo")
+    @Schema(description = "This is the Company's name", example = "Nintendo")
     private String name;
 
     @NotNull
-    @Schema(description = "This is the founding date of the company", example = "1889-09-23")
+    @Schema(description = "This is the founding date of the Company", example = "1889-09-23")
     private LocalDate dateOfFoundation;
 
 
