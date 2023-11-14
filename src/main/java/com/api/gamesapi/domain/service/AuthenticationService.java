@@ -1,5 +1,6 @@
 package com.api.gamesapi.domain.service;
 
+import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +22,8 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("Fetching user with username {}", username);
-        return userRepository.findByLogin(username);
+        return userRepository.findByLogin(username).orElseThrow(() -> new NotFoundException(String
+            .format("User not found with login %s", username)));
     }
 
 

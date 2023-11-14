@@ -20,7 +20,7 @@ import com.api.gamesapi.util.GameCreator;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class GameRepositoryTest {
+class GameRepositoryTest {
 
     @Autowired
     private GameRepository gameRepository;
@@ -48,8 +48,8 @@ public class GameRepositoryTest {
     }
 
     @Test
-    @DisplayName("existsById returns false when game do not exists")
-    void existsById_ReturnsFalse_WhenGameDoNotExists() {
+    @DisplayName("existsById returns false when game does not exists")
+    void existsById_ReturnsFalse_WhenGameDoesNotExists() {
         Long idExpected = 1l;
         
         Boolean gameExists = gameRepository.existsById(idExpected);
@@ -89,6 +89,7 @@ public class GameRepositoryTest {
         Assertions.assertThat(pageGame).isNotNull().isEmpty();
 
     }
+
     @AfterEach
     void end() {
         gameRepository.deleteAll();

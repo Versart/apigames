@@ -36,7 +36,7 @@ import com.api.gamesapi.util.UserCreator;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class GameControllerIT {
+class GameControllerIT {
     
     @Autowired
     private TestRestTemplate testRestTemplate;

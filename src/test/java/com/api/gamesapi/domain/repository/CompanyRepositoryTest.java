@@ -23,9 +23,6 @@ class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-
-
-
     @Test
     @DisplayName("Save creates company when successful")
     public void save_PersistCompany_WhenSuccessful() {

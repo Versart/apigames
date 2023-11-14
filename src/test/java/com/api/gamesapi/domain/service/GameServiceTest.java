@@ -35,7 +35,7 @@ import com.api.gamesapi.util.GameCreator;
 import com.api.gamesapi.util.GameDTOCreator;
 
 @ExtendWith(SpringExtension.class)
-public class GameServiceTest {
+class GameServiceTest {
 
     @InjectMocks
     private GameService gameService;
