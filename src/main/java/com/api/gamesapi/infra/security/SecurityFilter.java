@@ -1,5 +1,6 @@
 package com.api.gamesapi.infra.security;
 
+import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.repository.UserRepository;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
@@ -31,7 +32,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (token != null) {
                 String subject = tokenService.getSubject(token);
                 if(SecurityContextHolder.getContext().getAuthentication() == null){
-                    UserDetails userDetails = userRepository.findByLogin(subject);
+                    UserDetails userDetails = userRepository.findByLogin(subject)
+                        .orElseThrow(() -> new NotFoundException(String
+                        .format("User not found with login %s", subject)));
                     var authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
