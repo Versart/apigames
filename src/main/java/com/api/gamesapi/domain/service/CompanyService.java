@@ -30,7 +30,6 @@ public class CompanyService {
 
     private final CompanyMapper companyMapper;
 
-
     private final GameService gameService;
 
     @Transactional

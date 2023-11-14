@@ -15,13 +15,13 @@ import java.util.List;
 public class CompanyDTOCreator {
 
     public static CompanyRequest createCompanyRequest() {
-        return CompanyRequest.builder().name("Company Test").dateOfFoundation(LocalDate.now()).build();
+        return CompanyRequest.builder().name("Nintendo").dateOfFoundation(LocalDate.now()).build();
     }
     public static CompanyResponse createCompanyResponse() {
         return CompanyResponse.builder()
             .id(1l)
             .dateOfFoundation(LocalDate.now())
-            .name("Company Test").build();
+            .name("Nintendo").build();
     }
     public static CollectionModel<EntityModel<CompanyResponse>> createCollectionModelCompanyDTO() {
         return CollectionModel.of(List.of(createEntityModelCompanyResponse()));

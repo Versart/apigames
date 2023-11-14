@@ -31,19 +31,19 @@ class GameControllerTest {
     private GameController gameController;
 
     @Mock
-    private GameService gameService;
+    private GameService gameServiceMock;
 
     @BeforeEach
     void setup() {
         PagedModel<EntityModel<GameResponseDTO>> page = GameDTOCreator.createPagedModelGameResponse();
         EntityModel<GameResponseDTO> gameResponse = GameDTOCreator.createEntityModelGameResponse();
-        BDDMockito.when(gameService.getAllGames(ArgumentMatchers.any())).thenReturn(page);
-        BDDMockito.when(gameService.searchGameById(ArgumentMatchers.anyLong())).thenReturn(gameResponse);
-        BDDMockito.when(gameService.saveGame(ArgumentMatchers.any(GameRequestDTO.class))).thenReturn(gameResponse);
-        BDDMockito.when(gameService.updateGameById(ArgumentMatchers.anyLong(), ArgumentMatchers.any(
+        BDDMockito.when(gameServiceMock.getAllGames(ArgumentMatchers.any())).thenReturn(page);
+        BDDMockito.when(gameServiceMock.searchGameById(ArgumentMatchers.anyLong())).thenReturn(gameResponse);
+        BDDMockito.when(gameServiceMock.saveGame(ArgumentMatchers.any(GameRequestDTO.class))).thenReturn(gameResponse);
+        BDDMockito.when(gameServiceMock.updateGameById(ArgumentMatchers.anyLong(), ArgumentMatchers.any(
             GameRequestDTO.class
         ))).thenReturn(GameDTOCreator.createEntityModelAlteredGameResponse());
-        BDDMockito.doNothing().when(gameService).deleteGameById(ArgumentMatchers.anyLong());
+        BDDMockito.doNothing().when(gameServiceMock).deleteGameById(ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -57,12 +57,17 @@ class GameControllerTest {
 
         Assertions.assertThat(page.getContent().stream().toList()
             .get(0).getContent().getCompanyName()).isEqualTo(expectedName);
+        
+        Assertions.assertThat(page.getContent().stream().toList().get(0)
+            .getLinks()).isNotNull().isNotEmpty();
+        
+        Assertions.assertThat(page.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("getAllGames returns empty PagedModel of GameResponse when no game is found")
     void getAllGames_ReturnsEmptyPagedModelOfResponse_WhenNoGameIsFound() {
-        BDDMockito.when(gameService.getAllGames(ArgumentMatchers.any())).thenReturn(PagedModel.empty());
+        BDDMockito.when(gameServiceMock.getAllGames(ArgumentMatchers.any())).thenReturn(PagedModel.empty());
 
         PagedModel<EntityModel<GameResponseDTO>> page = gameController.getAllGames(PageRequest.of(1, 1)).getBody();
 
@@ -74,22 +79,24 @@ class GameControllerTest {
     @Test
     @DisplayName("getGameById returns EntityModel of GameResponse when successful")
     void getGameById_ReturnsEntityModelOfGameResponse_WhenSuccessful() {
-        Long expectedId = GameDTOCreator.createGameResponse().getId();
+        Long idExpected = GameDTOCreator.createGameResponse().getId();
 
         EntityModel<GameResponseDTO> game = gameController.getGameById(1l).getBody();
 
         Assertions.assertThat(game).isNotNull();
 
-        Assertions.assertThat(game.getContent().getId()).isEqualTo(expectedId);
+        Assertions.assertThat(game.getContent().getId()).isEqualTo(idExpected);
+
+        Assertions.assertThat(game.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("getGameById throws NotFoundException when game is not found")
     void getGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameService.searchGameById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
+        BDDMockito.when(gameServiceMock.searchGameById(ArgumentMatchers.anyLong())).thenThrow(NotFoundException.class);
 
         Assertions.assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> gameService.searchGameById(1l)
+            () -> gameServiceMock.searchGameById(1l)
         );
         
     }
@@ -104,12 +111,14 @@ class GameControllerTest {
         Assertions.assertThat(gameSaved).isNotNull();
 
         Assertions.assertThat(gameSaved.getContent().getId()).isNotNull();
+
+        Assertions.assertThat(gameSaved.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("saveGame throws CompanyNotFound when company is not found")
     void saveGame_ThrowsCompanyNotFoundException_WhenCompanyIsNotFound() {
-        BDDMockito.when(gameService.saveGame(ArgumentMatchers.any(GameRequestDTO.class)))
+        BDDMockito.when(gameServiceMock.saveGame(ArgumentMatchers.any(GameRequestDTO.class)))
             .thenThrow(CompanyNotFoundException.class);
         
         Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
@@ -129,12 +138,14 @@ class GameControllerTest {
         Assertions.assertThat(alteredGame).isNotNull();
 
         Assertions. assertThat(alteredGame.getContent().getId()).isEqualTo(idExpected);
+
+        Assertions.assertThat(alteredGame.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
-    @DisplayName("updateGameById thrown NotFoundException when game is not found")
+    @DisplayName("updateGameById thrown NotFoundException when Game is not found")
     void updateGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameService.updateGameById(ArgumentMatchers.anyLong(), 
+        BDDMockito.when(gameServiceMock.updateGameById(ArgumentMatchers.anyLong(), 
             ArgumentMatchers.any(GameRequestDTO.class))).thenThrow(NotFoundException.class);
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
@@ -159,7 +170,7 @@ class GameControllerTest {
     @DisplayName("deleteGameById throws NotFoundException when game is not found")
     void deleteGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
         BDDMockito.doThrow(EntityNotFoundException.class)
-            .when(gameService).deleteGameById(ArgumentMatchers.anyLong());
+            .when(gameServiceMock).deleteGameById(ArgumentMatchers.anyLong());
         
         Assertions.assertThatExceptionOfType(EntityNotFoundException.class)
             .isThrownBy(() -> gameController.deleteGameById(1l));

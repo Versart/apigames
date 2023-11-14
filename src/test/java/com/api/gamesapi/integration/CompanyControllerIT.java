@@ -77,13 +77,13 @@ class CompanyControllerIT {
                 company -> company.getContent().getId()
         )).contains(companySaved.getId());
         
-        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
-        
         Assertions.assertThat(exchange.getBody().getContent().stream().toList()
                 .get(0).getLinks()).isNotNull().isNotEmpty();
         
         Assertions.assertThat(exchange.getBody().getContent().stream().toList()
                 .get(0).getLinks().toString()).contains("/companies/" + companySaved.getId());
+        
+        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test

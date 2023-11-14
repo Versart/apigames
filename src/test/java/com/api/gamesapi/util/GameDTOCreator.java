@@ -26,7 +26,7 @@ public class GameDTOCreator {
     }
 
     public static EntityModel<GameResponseDTO> createEntityModelGameResponse() {
-        return EntityModel.of(createGameResponse());
+        return EntityModel.of(createGameResponse(),Link.of("/games/"));
     }
 
     public static GameResponseDTO createGameResponse() {
@@ -62,6 +62,6 @@ public class GameDTOCreator {
     }
 
     public static EntityModel<GameResponseDTO> createEntityModelAlteredGameResponse() {
-        return EntityModel.of(createAlteredGameResponse());
+        return EntityModel.of(createAlteredGameResponse(),Link.of("/games/") );
     }
 }
