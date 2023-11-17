@@ -28,6 +28,7 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setup() {
         UserDetails userDetails = UserCreator.createUserAdmin();
+        
         BDDMockito.when(userRepository.findByLogin(ArgumentMatchers.anyString()))
             .thenReturn(Optional.of(userDetails));
     }

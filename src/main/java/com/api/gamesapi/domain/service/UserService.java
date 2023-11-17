@@ -33,7 +33,7 @@ public class UserService {
 
     private final TokenService tokenService;
 
-    private boolean loginxists(String login){
+    public boolean loginxists(String login){
         logger.info("Verifying if exists user with login {}", login);
         return userRepository.existsUserByLogin(login);
     }
