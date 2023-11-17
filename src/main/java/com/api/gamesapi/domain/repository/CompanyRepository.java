@@ -13,7 +13,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     boolean existsById(Long companyId);
 
-    List<Company> findByName(String name);
+    Page<Company> findByName(String name, Pageable pageable);
 
     Page<Company> findByNameContains(String name, Pageable pageable);
 

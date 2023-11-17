@@ -12,9 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import com.api.gamesapi.domain.exception.NotFoundException;
-import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.repository.UserRepository;
 import com.api.gamesapi.util.UserCreator;
 

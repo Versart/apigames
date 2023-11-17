@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -70,26 +72,26 @@ class CompanyRepositoryTest {
     }
 
     @Test
-    @DisplayName("Find by name return List of company when successful")
+    @DisplayName("Find by name return Page of company when successful")
     public void findByName_ReturnsListOfAnime_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = companyRepository.save(companyToBeSaved);
 
-        List<Company> companyList = companyRepository.findByName(savedCompany.getName());
+        Page<Company> companyPage = companyRepository.findByName(savedCompany.getName(), PageRequest.of(0, 10));
 
-        Assertions.assertThat(companyList).isNotNull();
+        Assertions.assertThat(companyPage).isNotNull();
 
-        Assertions.assertThat(companyList.size()).isGreaterThanOrEqualTo(1);
+        Assertions.assertThat(companyPage.getSize()).isGreaterThanOrEqualTo(1);
 
-        Assertions.assertThat(companyList).contains(savedCompany);
+        Assertions.assertThat(companyPage).contains(savedCompany);
     }
 
     @Test
     @DisplayName("Find by name return List of company empty when no company is found")
     public void findByName_ReturnsEmptyListOfAnime_WhenCompanyIsNotFound() {
 
-        List<Company> companyList = companyRepository.findByName("");
+        Page<Company> companyList = companyRepository.findByName("", PageRequest.of(0, 10));
 
         Assertions.assertThat(companyList).isNotNull();
 

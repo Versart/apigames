@@ -41,36 +41,36 @@ class GameServiceTest {
     private GameService gameService;
 
     @Mock
-    private GameRepository gameRepository;
+    private GameRepository gameRepositoryMock;
     
     @Mock
-    private CompanyRepository companyRepository;
+    private CompanyRepository companyRepositoryMock;
     
     @Mock
-    private GameMapper gameMapper;
+    private GameMapper gameMapperMock;
 
     @BeforeEach
     void setup() {
         Page<Game> page = new PageImpl<>(List.of(GameCreator.createGameToBeSaved()));
         PagedModel<EntityModel<GameResponseDTO>> pagedModel = GameDTOCreator.createPagedModelGameResponse();
-        BDDMockito.when(gameRepository.findAll(ArgumentMatchers.any(PageRequest.class))).thenReturn(page);
-        BDDMockito.when(gameMapper.toPagedModel(ArgumentMatchers.any(Page.class)))
+        BDDMockito.when(gameRepositoryMock.findAll(ArgumentMatchers.any(PageRequest.class))).thenReturn(page);
+        BDDMockito.when(gameMapperMock.toPagedModel(ArgumentMatchers.any(Page.class)))
             .thenReturn(pagedModel);
-        BDDMockito.when(gameRepository.findByCompanyId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
+        BDDMockito.when(gameRepositoryMock.findByCompanyId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
             .thenReturn(page);
-        BDDMockito.when(companyRepository.findById(ArgumentMatchers.anyLong())).thenReturn(
+        BDDMockito.when(companyRepositoryMock.findById(ArgumentMatchers.anyLong())).thenReturn(
             Optional.of(CompanyCreator.createValidCompany())
         );
-        BDDMockito.when(gameRepository.save(ArgumentMatchers.any(Game.class))).thenReturn(
+        BDDMockito.when(gameRepositoryMock.save(ArgumentMatchers.any(Game.class))).thenReturn(
             GameCreator.createValidGame()
         );
-        BDDMockito.when(gameMapper.toEntity(ArgumentMatchers.any(GameRequestDTO.class)))
+        BDDMockito.when(gameMapperMock.toEntity(ArgumentMatchers.any(GameRequestDTO.class)))
             .thenReturn(GameCreator.createValidGame());
-        BDDMockito.when(gameMapper.toModelResponse(ArgumentMatchers.any(Game.class)))
+        BDDMockito.when(gameMapperMock.toModelResponse(ArgumentMatchers.any(Game.class)))
             .thenReturn(GameDTOCreator.createEntityModelGameResponse());
-        BDDMockito.when(gameRepository.existsById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.existsById(ArgumentMatchers.anyLong()))
             .thenReturn(true);
-        BDDMockito.when(gameRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.findById(ArgumentMatchers.anyLong()))
             .thenReturn(Optional.of(GameCreator.createValidGame()));
     }
 
@@ -85,15 +85,20 @@ class GameServiceTest {
 
         Assertions.assertThat(page.getContent().stream().toList().get(0).getContent().getName())
             .isEqualTo(expectedName);
+        
+        Assertions.assertThat(page.getContent().stream().toList().get(0).getLinks())
+            .isNotNull().isNotEmpty();
+
+        Assertions.assertThat(page.getLinks()).isNotNull().isNotEmpty();
 
     }
 
     @Test
     @DisplayName("getAllGames returns empty PagedModel of GameResponse when no game is found")
     void getAllGames_ReturnsEmptyPagedModelOfGameResponse_WhenSuccessful() {
-        BDDMockito.when(gameRepository.findAll(ArgumentMatchers.any(PageRequest.class)))
+        BDDMockito.when(gameRepositoryMock.findAll(ArgumentMatchers.any(PageRequest.class)))
             .thenReturn(Page.empty());
-         BDDMockito.when(gameMapper.toPagedModel(ArgumentMatchers.any(Page.class)))
+         BDDMockito.when(gameMapperMock.toPagedModel(ArgumentMatchers.any(Page.class)))
             .thenReturn(PagedModel.empty());
         
         PagedModel<EntityModel<GameResponseDTO>> page = gameService.getAllGames(PageRequest.of(0, 1));
@@ -112,14 +117,19 @@ class GameServiceTest {
 
         Assertions.assertThat(games.getContent().stream().toList().get(0).getContent().getCompanyName())
             .isEqualTo(company.getName());
+        
+        Assertions.assertThat(games.getContent().stream().toList().get(0).getLinks())
+            .isNotNull().isNotEmpty();
+        
+        Assertions.assertThat(games.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("listGamesByCompanyId returns empty PagedModel of GameResponse when no game is found")
     void listGamesByCompanyId_ReturnsEmptyPagedModelOfGameResponse_WhenNoGameIsFound() {
-        BDDMockito.when(gameRepository.findByCompanyId(ArgumentMatchers.anyLong(),ArgumentMatchers.any(PageRequest.class)))
+        BDDMockito.when(gameRepositoryMock.findByCompanyId(ArgumentMatchers.anyLong(),ArgumentMatchers.any(PageRequest.class)))
             .thenReturn(Page.empty());
-         BDDMockito.when(gameMapper.toPagedModel(ArgumentMatchers.any(Page.class)))
+         BDDMockito.when(gameMapperMock.toPagedModel(ArgumentMatchers.any(Page.class)))
             .thenReturn(PagedModel.empty());
         
         PagedModel<EntityModel<GameResponseDTO>> games = gameService.listGamesByCompanyId(1l, PageRequest.of(0, 1));
@@ -139,11 +149,13 @@ class GameServiceTest {
         Assertions.assertThat(savedGame.getContent().getId()).isNotNull();
         
         Assertions.assertThat(savedGame.getContent().getCompanyName()).isNotNull();
+
+        Assertions.assertThat(savedGame.getLinks()).isNotNull().isNotEmpty();
     }
     @Test
     @DisplayName("saveGame throws NotFoundException when Company of the Game is not found")
     void saveGame_ThrowsNotFoundException_WhenCompanyOfTheGameIsNotFound() {
-        BDDMockito.when(companyRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(companyRepositoryMock.findById(ArgumentMatchers.anyLong()))
             .thenReturn(Optional.empty());
         
         Assertions.assertThatExceptionOfType(CompanyNotFoundException.class)
@@ -161,7 +173,7 @@ class GameServiceTest {
     @Test
     @DisplayName("deleteGameById throws NotFoundException when game is not found")
     void deleteGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameRepository.existsById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.existsById(ArgumentMatchers.anyLong()))
             .thenReturn(false);
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
@@ -180,12 +192,14 @@ class GameServiceTest {
         Assertions.assertThat(game).isNotNull();
 
         Assertions.assertThat(game.getContent().getId()).isNotNull().isEqualTo(idExpected);
+
+        Assertions.assertThat(game.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("searchGameById throws NotFoundException when game is not found")
     void searchGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.findById(ArgumentMatchers.anyLong()))
             .thenReturn(Optional.empty());
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)
@@ -205,12 +219,14 @@ class GameServiceTest {
         Assertions.assertThat(alteredGame).isNotNull();
 
         Assertions.assertThat(alteredGame.getContent().getId()).isEqualTo(idExpected);
+
+        Assertions.assertThat(alteredGame.getLinks()).isNotNull().isNotEmpty();
     }
 
     @Test
     @DisplayName("updateGameById throws CompanyNotFoundException when the Company of the Game is not found")
     void updateGameById_ThrowsCompanyNotFoundException_WhenTheCompanyOfTheGameIsNotFound() {
-        BDDMockito.when(companyRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(companyRepositoryMock.findById(ArgumentMatchers.anyLong()))
             .thenReturn(Optional.empty());
 
         GameRequestDTO gameTobeUpdated = GameDTOCreator.createAlteredGameRequest();
@@ -223,7 +239,7 @@ class GameServiceTest {
     @Test
     @DisplayName("updateGameById throws NotFoundException when game is not found")
     void updateGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameRepository.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.findById(ArgumentMatchers.anyLong()))
             .thenReturn(Optional.empty());
 
         GameRequestDTO gameTobeUpdated = GameDTOCreator.createAlteredGameRequest();
@@ -247,7 +263,7 @@ class GameServiceTest {
     @Test
     @DisplayName("gameExists throws NotFoundException when Game is not found")
     void gameExists_ThrowsNotFoundException_WhenGameIsNotFound() {
-        BDDMockito.when(gameRepository.existsById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(gameRepositoryMock.existsById(ArgumentMatchers.anyLong()))
             .thenReturn(false);
 
         Assertions.assertThatExceptionOfType(NotFoundException.class)

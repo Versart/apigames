@@ -26,6 +26,7 @@ class UserRepositoryTest {
     @DisplayName("existsUserByLogin returns true when successful")
     void existsUserByLogin_ReturnsTrue_WhenSuccessful() {
         User userSaved = userRepository.save(UserCreator.createUserAdmin());
+        
         String loginExpected = userSaved.getLogin();
 
         boolean existsUser  = userRepository.existsUserByLogin(loginExpected);
