@@ -53,24 +53,31 @@ class UserServiceTest {
 
         BDDMockito.when(userMapperMock.toEntity(ArgumentMatchers.any(UserRequest.class)))
             .thenReturn(UserCreator.createUserAdmin());
+        
         BDDMockito.when(userMapperMock.toModel(ArgumentMatchers.any(User.class)))
-            .thenReturn(UserDTOCreator.createUserResponse());
+        .thenReturn(UserDTOCreator.createUserResponse());
+    
         BDDMockito.when(userRepositoryMock.save(ArgumentMatchers.any(User.class)))
-            .thenReturn(UserCreator.createUserAdmin());
+        .thenReturn(UserCreator.createUserAdmin());
+    
         BDDMockito.when(authenticationManagerMock.authenticate(ArgumentMatchers.any(Authentication.class)))
-            .thenReturn(authenticationMock);
+        .thenReturn(authenticationMock);
+    
         BDDMockito.when(authenticationMock.getPrincipal()).thenReturn(UserCreator.createUserAdmin());
+    
         BDDMockito.when(tokenServiceMock.getToken(ArgumentMatchers.any(User.class)))
-            .thenReturn(token);
+        .thenReturn(token);
+    
         BDDMockito.when(userRepositoryMock.existsUserByLogin(ArgumentMatchers.anyString()))
-            .thenReturn(false);
+        .thenReturn(false);
     }
 
     @Test
     @DisplayName("loginExists returns true when User exists")
     void loginExists_ReturnsTrue_WhenUserExists() {
-         BDDMockito.when(userRepositoryMock.existsUserByLogin(ArgumentMatchers.anyString()))
+        BDDMockito.when(userRepositoryMock.existsUserByLogin(ArgumentMatchers.anyString()))
             .thenReturn(true);
+        
         String login = LoginCreator.createLoginRequest().getLogin();
 
         boolean exists = userService.loginxists(login);
@@ -81,8 +88,6 @@ class UserServiceTest {
     @Test
     @DisplayName("loginExists returns false when User not exists")
     void loginExists_ReturnsFalse_WhenUserExists() {
-       
-
         String login = "";
 
         boolean exists = userService.loginxists(login);

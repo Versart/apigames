@@ -56,6 +56,7 @@ class CompanyControllerTest {
                 ,ArgumentMatchers.any(CompanyRequest.class))).thenReturn(entityModelCompanyDto);
 
         BDDMockito.doNothing().when(companyServiceMock).deleteCompanyById(ArgumentMatchers.anyLong());
+        
         BDDMockito.when(companyServiceMock.getGamesOfCompany(ArgumentMatchers.anyLong(), ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(GameDTOCreator.createPagedModelGameResponse());
     }
@@ -141,7 +142,8 @@ class CompanyControllerTest {
     void getByName_ReturnsEmptyCollectionModelOfCompanyDto_WhenCompanyIsNotFound() {
         BDDMockito.when(companyServiceMock.findCompanyByName(ArgumentMatchers.anyString(), ArgumentMatchers.any(PageRequest.class)))
                 .thenReturn(PagedModel.empty());
-        CollectionModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company",PageRequest.of(0, 1)).getBody();
+        
+        PagedModel<EntityModel<CompanyResponse>> companies = companyController.getByName("company",PageRequest.of(0, 1)).getBody();
 
         Assertions.assertThat(companies).isNotNull().isEmpty();
     }

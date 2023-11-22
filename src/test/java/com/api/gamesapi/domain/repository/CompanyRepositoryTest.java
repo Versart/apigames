@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -27,7 +26,7 @@ class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Save creates company when successful")
-    public void save_PersistCompany_WhenSuccessful() {
+    void save_PersistCompany_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = companyRepository.save(companyToBeSaved);
@@ -41,7 +40,7 @@ class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Save updates company when successful")
-    public void save_UpdatesCompany_WhenSuccessful() {
+    void save_UpdatesCompany_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = companyRepository.save(companyToBeSaved);
@@ -59,7 +58,7 @@ class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Delete remove company when successful")
-    public void delete_RemoveCompany_WhenSuccessful() {
+    void delete_RemoveCompany_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = companyRepository.save(companyToBeSaved);
@@ -73,7 +72,7 @@ class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Find by name return Page of company when successful")
-    public void findByName_ReturnsListOfAnime_WhenSuccessful() {
+    void findByName_ReturnsListOfAnime_WhenSuccessful() {
         Company companyToBeSaved = CompanyCreator.createCompanyToBeSaved();
 
         Company savedCompany = companyRepository.save(companyToBeSaved);
@@ -82,26 +81,23 @@ class CompanyRepositoryTest {
 
         Assertions.assertThat(companyPage).isNotNull();
 
-        Assertions.assertThat(companyPage.getSize()).isGreaterThanOrEqualTo(1);
+        Assertions.assertThat(companyPage.getSize()).isPositive();
 
         Assertions.assertThat(companyPage).contains(savedCompany);
     }
 
     @Test
     @DisplayName("Find by name return List of company empty when no company is found")
-    public void findByName_ReturnsEmptyListOfAnime_WhenCompanyIsNotFound() {
+    void findByName_ReturnsEmptyListOfAnime_WhenCompanyIsNotFound() {
 
         Page<Company> companyList = companyRepository.findByName("", PageRequest.of(0, 10));
 
-        Assertions.assertThat(companyList).isNotNull();
-
-        Assertions.assertThat(companyList).isEmpty();
-
+        Assertions.assertThat(companyList).isNotNull().isEmpty();;
     }
 
     @Test
     @DisplayName("Save throw ConstraintValidationException when name is empty")
-    public void save_ThrowsConstraintException_WhenNameIsEmpty() {
+    void save_ThrowsConstraintException_WhenNameIsEmpty() {
         Company company = CompanyCreator.createCompanyWithoutName();
 
         Assertions.assertThatExceptionOfType(ConstraintViolationException.class)

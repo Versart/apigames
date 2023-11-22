@@ -23,13 +23,13 @@ class AuthenticationServiceTest {
     private AuthenticationService authenticationService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepository userRepositoryMock;
 
     @BeforeEach
     void setup() {
         UserDetails userDetails = UserCreator.createUserAdmin();
         
-        BDDMockito.when(userRepository.findByLogin(ArgumentMatchers.anyString()))
+        BDDMockito.when(userRepositoryMock.findByLogin(ArgumentMatchers.anyString()))
             .thenReturn(Optional.of(userDetails));
     }
 
@@ -46,7 +46,7 @@ class AuthenticationServiceTest {
 
     @Test
     void loadUserByUsername_ThrowsNotFoundException_WhenUserDoesNotExists() {
-        BDDMockito.when(userRepository.findByLogin(ArgumentMatchers.anyString()))
+        BDDMockito.when(userRepositoryMock.findByLogin(ArgumentMatchers.anyString()))
             .thenReturn(Optional.empty());
         
         Assertions.assertThatExceptionOfType(NotFoundException.class)

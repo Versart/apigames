@@ -36,13 +36,19 @@ class GameControllerTest {
     @BeforeEach
     void setup() {
         PagedModel<EntityModel<GameResponseDTO>> page = GameDTOCreator.createPagedModelGameResponse();
+        
         EntityModel<GameResponseDTO> gameResponse = GameDTOCreator.createEntityModelGameResponse();
+        
         BDDMockito.when(gameServiceMock.getAllGames(ArgumentMatchers.any())).thenReturn(page);
+        
         BDDMockito.when(gameServiceMock.searchGameById(ArgumentMatchers.anyLong())).thenReturn(gameResponse);
+        
         BDDMockito.when(gameServiceMock.saveGame(ArgumentMatchers.any(GameRequestDTO.class))).thenReturn(gameResponse);
+        
         BDDMockito.when(gameServiceMock.updateGameById(ArgumentMatchers.anyLong(), ArgumentMatchers.any(
             GameRequestDTO.class
         ))).thenReturn(GameDTOCreator.createEntityModelAlteredGameResponse());
+        
         BDDMockito.doNothing().when(gameServiceMock).deleteGameById(ArgumentMatchers.anyLong());
     }
 

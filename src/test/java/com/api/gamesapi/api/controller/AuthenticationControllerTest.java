@@ -9,9 +9,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.api.gamesapi.api.model.LoginRequest;
@@ -20,7 +17,6 @@ import com.api.gamesapi.api.model.UserResponse;
 import com.api.gamesapi.domain.exception.DuplicatedEmailException;
 import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.service.UserService;
-import com.api.gamesapi.infra.security.TokenService;
 import com.api.gamesapi.util.LoginCreator;
 import com.api.gamesapi.util.UserCreator;
 import com.api.gamesapi.util.UserDTOCreator;
@@ -32,16 +28,19 @@ class AuthenticationControllerTest {
     private AuthenticationController authenticationController;
 
     @Mock
-    private  UserService userService;
+    private  UserService userServiceMock;
 
     @BeforeEach
     void setup() {
         String token = "shagshg1212hgjsgd";
         User user = UserCreator.createUserAdmin();
+        
         UserResponse userResponse = UserDTOCreator.createUserResponse();
-        BDDMockito.when(userService.saveUser(ArgumentMatchers.any(UserRequest.class)))
+        
+        BDDMockito.when(userServiceMock.saveUser(ArgumentMatchers.any(UserRequest.class)))
             .thenReturn(userResponse);
-        BDDMockito.when(userService.login(ArgumentMatchers.any(LoginRequest.class)))
+        
+            BDDMockito.when(userServiceMock.login(ArgumentMatchers.any(LoginRequest.class)))
             .thenReturn(token);
     }
 
@@ -58,7 +57,7 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("login throws AuthenticationException when authentication fails")
     void login_ThrowsAuthenticationException_WhenAuthenticationFails() {
-        BDDMockito.when(userService.login(ArgumentMatchers.any(LoginRequest.class)))
+        BDDMockito.when(userServiceMock.login(ArgumentMatchers.any(LoginRequest.class)))
             .thenThrow(AuthenticationFailed.class);
             
         LoginRequest loginRequest = LoginCreator.createLoginRequest();
@@ -83,7 +82,7 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("register throws DuplicatedEmailException when there is already user with email")
     void register_ThrowsDuplicatedEmailException_WhenThereIsAlreadyUserWithEmail() {
-        BDDMockito.when(userService.saveUser(ArgumentMatchers.any(UserRequest.class)))
+        BDDMockito.when(userServiceMock.saveUser(ArgumentMatchers.any(UserRequest.class)))
             .thenThrow(DuplicatedEmailException.class);
 
         UserRequest userRequest = UserDTOCreator.createUserRequest();

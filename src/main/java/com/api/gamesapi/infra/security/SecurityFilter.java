@@ -3,7 +3,6 @@ package com.api.gamesapi.infra.security;
 import com.api.gamesapi.domain.exception.NotFoundException;
 import com.api.gamesapi.domain.repository.UserRepository;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component
@@ -43,7 +41,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         catch(JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().println(e.getLocalizedMessage());
         }
         filterChain.doFilter(request,response);
 
