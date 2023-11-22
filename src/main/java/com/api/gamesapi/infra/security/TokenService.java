@@ -29,8 +29,7 @@ public class TokenService {
                     .sign(algorithm);
 
         } catch (JWTCreationException exception){
-            throw new RuntimeException("Erro ao gerar token");
-            // Invalid Signing configuration / Couldn't convert Claims.
+            throw new JWTCreationException("", new Throwable());
         }
     }
 
