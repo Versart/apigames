@@ -86,6 +86,31 @@ class GameControllerIT {
     }
 
     @Test
+    @DisplayName("getAllGames returns empty PagedModel of GameResponse when no game is found")
+    void getAllGames_ReturnsEmptyPagedModelOfGameResponse_WhenNoGameIsFound() {
+        LoginRequest loginRequest = new LoginRequest("maria","12345678");
+        String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization","Bearer " + token);
+
+        String url = "/games";
+        
+        ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders), new ParameterizedTypeReference<>() {
+        });
+
+        Assertions.assertThat(exchange).isNotNull();
+
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(exchange.getBody()).isNotNull().isEmpty();
+
+        Assertions.assertThat(exchange.getBody().getContent()).isNotNull().isEmpty();;
+
+        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
+    }
+
+
+    @Test
     @DisplayName("getGameById returns EntityModel of GameResponse when successful")
     void getGameById_ReturnsEntityModelOfGameResponse_WhenSuccessful() {
         LoginRequest loginRequest = new LoginRequest("maria","12345678");
@@ -111,12 +136,33 @@ class GameControllerIT {
 
         Assertions.assertThat(exchange.getBody().getContent().getId()).isEqualTo(idGameExpected);
 
-        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
-
         Assertions.assertThat(exchange.getBody().getLinks().toString()).contains(
             url.replace("/{id}","") + "/" + idGameExpected
         );
+
+         Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
     }
+
+    @Test
+    @DisplayName("getGameById throws NotFoundException when Game is not found")
+    void getGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        LoginRequest loginRequest = new LoginRequest("maria","12345678");
+        String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization","Bearer " + token);
+
+        String url = "/games/{id}";
+        Long idGameExpected = 1l;
+
+        ResponseEntity<Object> exchange = testRestTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null,httpHeaders), new ParameterizedTypeReference<>() {
+        }, idGameExpected);
+
+        Assertions.assertThat(exchange).isNotNull();
+
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+    }
+
 
     @Test
     @DisplayName("saveGame returns EntityModel of GameResponse when successful")
@@ -142,7 +188,27 @@ class GameControllerIT {
         
         Assertions.assertThat(exchange.getBody().getContent().getId()).isNotNull();
 
-        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();
+        Assertions.assertThat(exchange.getBody().getLinks()).isNotNull().isNotEmpty();   
+    }
+
+    @Test
+    @DisplayName("saveGame throws CompanyNotFoundException when Company is not found")
+    void saveGame_ThrowsCompanyNotFoundException_WhenCompanyIsNotFound() {
+        LoginRequest loginRequest = new LoginRequest("maria","12345678");
+        String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization","Bearer " + token);
+
+        GameRequestDTO gameToBeSaved = GameDTOCreator.createGameRequest();
+        gameToBeSaved.setCompanyId(1l);
+        String url = "/games";
+
+        ResponseEntity<Object> exchange = testRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(gameToBeSaved,httpHeaders), new ParameterizedTypeReference<>() { 
+        });
+
+        Assertions.assertThat(exchange).isNotNull();
+
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         
     }
 
@@ -180,6 +246,27 @@ class GameControllerIT {
     }
 
     @Test
+    @DisplayName("updateGameById throws NotFoundException when Game is not found")
+    void updateGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        LoginRequest loginRequest = new LoginRequest("maria","12345678");
+        String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization","Bearer " + token);
+
+        Long idUpdated = 1l;
+        GameRequestDTO gameToBeUpdated = GameDTOCreator.createAlteredGameRequest();
+        String url = "/games/{id}";
+
+        ResponseEntity<Object> exchange = testRestTemplate.exchange(url, HttpMethod.PUT, 
+            new HttpEntity<>(gameToBeUpdated,httpHeaders), new ParameterizedTypeReference<>() {    
+            },idUpdated);
+        
+        Assertions.assertThat(exchange).isNotNull();
+
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     @DisplayName("deleteGameById removes Game when successful")
     void deleteGameById_DeleteGame_WhenSuccessful() {
         LoginRequest loginRequest = new LoginRequest("maria","12345678");
@@ -201,6 +288,26 @@ class GameControllerIT {
 
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
+
+    @Test
+    @DisplayName("deleteGameById throws NotFoundException when Game is not found")
+    void deleteGameById_ThrowsNotFoundException_WhenGameIsNotFound() {
+        LoginRequest loginRequest = new LoginRequest("maria","12345678");
+        String token = testRestTemplate.postForObject("/auth/login",loginRequest,String.class);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization","Bearer " + token);
+
+        Long idDeleted = 1l;
+        String url = "/games/{id}";
+
+        ResponseEntity<Object> exchange = testRestTemplate.exchange(url, HttpMethod.DELETE, new HttpEntity<>(null,httpHeaders), new ParameterizedTypeReference<>() {    
+        },idDeleted);
+
+        Assertions.assertThat(exchange).isNotNull();
+
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
 
     @BeforeEach
     void setup() {
