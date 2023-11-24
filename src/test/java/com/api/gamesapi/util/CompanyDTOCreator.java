@@ -2,11 +2,9 @@ package com.api.gamesapi.util;
 
 import com.api.gamesapi.api.model.CompanyRequest;
 import com.api.gamesapi.api.model.CompanyResponse;
-
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
 import org.springframework.hateoas.PagedModel;
 
 import java.time.LocalDate;
@@ -17,15 +15,18 @@ public class CompanyDTOCreator {
     public static CompanyRequest createCompanyRequest() {
         return CompanyRequest.builder().name("Nintendo").dateOfFoundation(LocalDate.now()).build();
     }
+
     public static CompanyResponse createCompanyResponse() {
         return CompanyResponse.builder()
             .id(1l)
             .dateOfFoundation(LocalDate.now())
             .name("Nintendo").build();
     }
+
     public static CollectionModel<EntityModel<CompanyResponse>> createCollectionModelCompanyDTO() {
         return CollectionModel.of(List.of(createEntityModelCompanyResponse()));
     }
+
     public static PagedModel<EntityModel<CompanyResponse>> createPageDModelCompanyDTO() {
         List<EntityModel<CompanyResponse>> listCompanyDTO = List.of(createEntityModelCompanyResponse());
         PagedModel<EntityModel<CompanyResponse>> pagedModel = PagedModel.of(listCompanyDTO,
@@ -37,10 +38,7 @@ public class CompanyDTOCreator {
         return EntityModel.of(createCompanyResponse(),Link.of("companies/"));
     }
 
-
-
-
-
-
-
+    public static CompanyRequest createCompanyRequestWithoutName() {
+        return CompanyRequest.builder().dateOfFoundation(LocalDate.now()).build();
+    }
 }
