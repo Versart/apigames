@@ -31,16 +31,17 @@ public class SecurityConfiguration {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(httpRequest -> httpRequest
-                                .requestMatchers(HttpMethod.POST, "/games", "/companies").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/games/**", "/companies/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/games/**", "/companies/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/games/**", "/companies/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .accessDeniedHandler(deniedAccessHandler)
-                .and()
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint(unauthorizedHandler)
+                        .accessDeniedHandler(deniedAccessHandler))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
