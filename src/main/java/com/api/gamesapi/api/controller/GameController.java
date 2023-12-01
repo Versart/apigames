@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -31,9 +32,11 @@ public class GameController {
 
     @GetMapping
     @Operation(summary = "Lists all games paginated", tags = "Game", responses = {
-        @ApiResponse(description = "Successful operation", responseCode = "200")
+        @ApiResponse(description = "Successful operation", responseCode = "200"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
-    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(Pageable pageable) { 
+    public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getAllGames(@ParameterObject Pageable pageable) { 
         logger.info("Received request to fetch all games");
         return ResponseEntity.ok(gameService.getAllGames(pageable));
     }
@@ -41,7 +44,9 @@ public class GameController {
     @GetMapping("/{gameId}")
     @Operation(summary = "Gets a game by id", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
-        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
+        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> getGameById(@PathVariable long gameId){
         logger.info("Received request to fetch game with id {}", gameId);
@@ -51,7 +56,9 @@ public class GameController {
     @PostMapping
     @Operation(summary = "Creates a new game", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "201"),
-        @ApiResponse(description = "When the body is invalid", responseCode = "400")
+        @ApiResponse(description = "When the body is invalid", responseCode = "400"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> saveGame(@Valid @RequestBody GameRequestDTO game) {
         logger.info("Received request to create new game");
@@ -61,7 +68,9 @@ public class GameController {
     @PutMapping("/{gameId}")
     @Operation(summary = "Alters a game", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
-        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
+        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<EntityModel<GameResponseDTO>> updateGameById(@PathVariable long gameId, @Valid @RequestBody GameRequestDTO game) {
         logger.info("Received request to update game with id {}", gameId);
@@ -71,7 +80,9 @@ public class GameController {
    @DeleteMapping("/{gameId}")
    @Operation(summary = "Deletes a game by id", tags = "Game", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "204"),
-        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404")
+        @ApiResponse(description = "When the game does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
    })
     public ResponseEntity<Void> deleteGameById(@PathVariable long gameId) {
         logger.info("Received request to delete game with id {}", gameId);

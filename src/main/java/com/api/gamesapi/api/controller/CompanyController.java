@@ -37,7 +37,9 @@ public class CompanyController {
     @PostMapping
     @Operation(summary = "Creates a new company",tags = "Company",
         responses = {@ApiResponse(description = "Successful operation", responseCode = "201"),
-                     @ApiResponse(description = "When the body is invalid", responseCode = "400")})
+                     @ApiResponse(description = "When the body is invalid", responseCode = "400"),
+                     @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+                     @ApiResponse(description = "When the user does not have permission", responseCode = "403")})
     public ResponseEntity<EntityModel<CompanyResponse>> saveCompany(@Valid @RequestBody CompanyRequest companyDTO) {
         logger.info("Received request to create new company");
         return new ResponseEntity<>(companyService.saveCompany(companyDTO), HttpStatus.CREATED);
@@ -45,7 +47,9 @@ public class CompanyController {
 
     @GetMapping
     @Operation(summary = "Lists all companies paginated" ,tags = "Company", responses = {
-        @ApiResponse(description = "Successful operation", responseCode = "200")
+        @ApiResponse(description = "Successful operation", responseCode = "200"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<PagedModel<EntityModel<CompanyResponse>>> listCompanies(@ParameterObject Pageable pageable) {
         logger.info("Received request to fetch all companies");
@@ -55,14 +59,19 @@ public class CompanyController {
     @GetMapping("/{companyId}")
     @Operation(summary = "Gets a company by id",tags = "Company", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
-        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404")})
+        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
+    })
     public ResponseEntity<EntityModel<CompanyResponse>> getCompanyById(@Schema(description = "this is company's id", type = "number") @PathVariable long companyId) {
         logger.info("Received request to fetch  company with id {}", companyId);
         return ResponseEntity.ok(companyService.searchCompanyById(companyId));
     }
     @GetMapping("/find")
     @Operation(summary = "Gets companies which contains in the name, the name searched",tags = "Company"
-    ,responses = {@ApiResponse(description = "Successful operation", responseCode = "200")})
+    ,responses = {@ApiResponse(description = "Successful operation", responseCode = "200"),
+                  @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+                  @ApiResponse(description = "When the user does not have permission", responseCode = "403")})
     public ResponseEntity<PagedModel<EntityModel<CompanyResponse>>> getByName(@Schema(description = "this is company's name", type = "string") @RequestParam String name, @ParameterObject Pageable pageable){
         logger.info("Received request to fetch companies which contains {} in the name", name);
         return ResponseEntity.ok(companyService.findCompanyByName(name, pageable));
@@ -71,7 +80,9 @@ public class CompanyController {
     @GetMapping("/{companyId}/games")
     @Operation(summary = "Lists all games of company",tags = "Company", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
-        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404")})
+        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")})
     public ResponseEntity<PagedModel<EntityModel<GameResponseDTO>>> getGamesByCompanyId(@Schema(description = "this is company's id", type = "number") @PathVariable Long companyId, @ParameterObject Pageable pageable ){
         logger.info("Received request to fetch all games of the company with id {}", companyId);
         return ResponseEntity.ok(companyService.getGamesOfCompany(companyId, pageable));
@@ -80,7 +91,9 @@ public class CompanyController {
     @PutMapping("/{companyId}")
     @Operation(summary = "Alters a company",tags = "Company", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "200"),
-        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404")
+        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<EntityModel<CompanyResponse>> updateCompanyById(@Schema(description = "this is company's id", type = "number")@PathVariable long companyId, @Valid @RequestBody CompanyRequest companyDTO){
         logger.info("Received request to update company with id {}", companyId);
@@ -90,7 +103,9 @@ public class CompanyController {
     @DeleteMapping("/{companyId}")
     @Operation(summary = "Deletes a company by id",tags = "Company", responses = {
         @ApiResponse(description = "Successful operation", responseCode = "204"),
-        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404")
+        @ApiResponse(description = "When the company does not exists in the database", responseCode = "404"),
+        @ApiResponse(description = "When the user is not authenticated", responseCode = "401"),
+        @ApiResponse(description = "When the user does not have permission", responseCode = "403")
     })
     public ResponseEntity<Void> deleteCompanyById(@Schema(description = "this is company's id", type = "number") @PathVariable long companyId){
         logger.info("Received request to delete company with id {}", companyId);
