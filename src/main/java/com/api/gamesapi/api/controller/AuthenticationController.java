@@ -28,7 +28,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @Operation(summary = "Log in", tags = "Authentication", responses = {
-        @ApiResponse(description = "Successful operation", responseCode = "200")
+        @ApiResponse(description = "Successful operation", responseCode = "200"),
+        @ApiResponse(description = "When login fails", responseCode = "401")
     })
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest){
         logger.info("Received request to login");
