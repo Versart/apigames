@@ -1,5 +1,5 @@
 # apigames
-API Rest Utilizando Spring boot e o MYSQL
+API Rest Utilizando Spring boot que gerencia produtoras de games.
 
 ## Tecnologias utilizadas:
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/3.0.2/reference/htmlsingle/#using.devtools)
@@ -14,6 +14,10 @@ API Rest Utilizando Spring boot e o MYSQL
 * [Spring Security](https://spring.io/projects/spring-security)
 * [Prometheus](https://prometheus.io/)
 * [Jib](https://github.com/GoogleContainerTools/jib)
+* [GitHub Actions](https://github.com/features/actions)
+* [Grafana](https://grafana.com/)
+* [Modelmapper](http://modelmapper.org/)
+
 ## API Endpoints
 Para fazer requisições, é necessário primeiramente se registrar, e depois fazer login para receber um token, este deve ser enviado em todas requisições.
 ### Authentication
@@ -50,7 +54,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI.............................................
 ```
   Example Request
   {
-    "name" : "Nintendoow",
+    "name" : "Nintendo",
     "dateOfFoundation" : "1889-09-23"
   }
 ```
@@ -58,7 +62,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI.............................................
  Example Response
  {
     "id": 1,
-    "name": "Nintendoow",
+    "name": "Nintendo",
     "dateOfFoundation": "1889-09-23",
     "_links": {
       "self": {
@@ -75,7 +79,7 @@ Example Response
       "companyResponseList": [
         {
           "id": 1,
-          "name": "Nintendoow",
+          "name": "Nintendo",
           "dateOfFoundation": "1889-09-23",
           "_links": {
             "self": {
@@ -108,7 +112,7 @@ Example Request
 Example Response
 {
     "id": 1,
-    "name": "Nintendoow",
+    "name": "Nintendo",
     "dateOfFoundation": "1889-09-23",
     "_links": {
       "self": {
@@ -130,7 +134,7 @@ Example Response
     "companyResponseList": [
       {
         "id": 1,
-        "name": "Nintendoow",
+        "name": "Nintendo",
         "dateOfFoundation": "1889-09-23",
         "_links": {
           "self": {
@@ -147,7 +151,7 @@ Example Response
 Example Request
 /companies/1
 {
-  "name": "Nintendoow 2",
+  "name": "Nintendo 2",
   "dateOfFoundation": "1889-09-23"
 }
 
@@ -156,7 +160,7 @@ Example Request
 Example Response
 {
   "id": 1,
-  "name": "Nintendoow 2",
+  "name": "Nintendo 2",
   "dateOfFoundation": "1889-09-23",
   "_links": {
     "self": {
@@ -184,7 +188,7 @@ Example Request
 Example Response
 {
   "name": "Contra ",
-  "companyName": "Nintendoow",
+  "companyName": "Nintendo",
   "_links": {
     "self": {
       "href": "http://localhost:8080/games/1"
@@ -206,7 +210,7 @@ Example Request
     "gameResponseDTOList": [
       {
         "name": "Contra ",
-        "companyName": "Nintendoow",
+        "companyName": "Nintendo",
         "_links": {
           "self": {
             "href": "http://localhost:8080/games/1"
@@ -234,7 +238,7 @@ Example Request
 Example Response
 {
   "name": "Contra ",
-  "companyName": "Nintendoow",
+  "companyName": "Nintendo",
   "_links": {
     "self": {
       "href": "http://localhost:8080/games/1"
@@ -258,7 +262,7 @@ Example Request
 ```
 {
   "name": "Contra 2",
-  "companyName": "Nintendoow",
+  "companyName": "Nintendo",
   "_links": {
     "self": {
       "href": "http://localhost:8080/games/1"
