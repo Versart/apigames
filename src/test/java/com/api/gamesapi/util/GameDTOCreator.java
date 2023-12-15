@@ -1,16 +1,11 @@
 package com.api.gamesapi.util;
 
-import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.api.model.GameRequestDTO;
 import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Category;
-
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.PagedModel.PageMetadata;
-
 import java.util.List;
 
 public class GameDTOCreator {

@@ -6,7 +6,6 @@ import com.api.gamesapi.api.model.CompanyResponse;
 import com.api.gamesapi.domain.model.Company;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -47,7 +46,7 @@ public class CompanyMapper {
         
    }
 
-    public PagedModel<EntityModel<CompanyResponse>> toModelPage(Page pageCompany) {
+    public PagedModel<EntityModel<CompanyResponse>> toModelPage(Page<Company> pageCompany) {
 
         return pagedResourcesAssembler.toModel(pageCompany,this::toModel);
 

@@ -1,7 +1,6 @@
 package com.api.gamesapi.util;
 
 import com.api.gamesapi.api.model.LoginRequest;
-import com.api.gamesapi.api.model.UserRequest;
 
 public class LoginCreator {
     

@@ -6,18 +6,12 @@ import com.api.gamesapi.api.model.GameResponseDTO;
 import com.api.gamesapi.domain.model.Game;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
@@ -37,13 +31,7 @@ public class GameMapper {
                );
     }
 
-    /*public CollectionModel<EntityModel<GameResponseDTO>> toModelResponseList(List<Game> games){
-        return CollectionModel.of(games.stream().map(
-                this::toModelResponse
-        ).collect(Collectors.toList()),linkTo(methodOn(GameController.class).listGames()).withSelfRel());
-    }*/
-
-    public PagedModel<EntityModel<GameResponseDTO>> toPagedModel(Page games){
+    public PagedModel<EntityModel<GameResponseDTO>> toPagedModel(Page<Game> games){
         return pagedResourcesAssembler.toModel(games, this::toModelResponse);
     }
 

@@ -15,10 +15,8 @@ import com.api.gamesapi.api.model.LoginRequest;
 import com.api.gamesapi.api.model.UserRequest;
 import com.api.gamesapi.api.model.UserResponse;
 import com.api.gamesapi.domain.exception.DuplicatedEmailException;
-import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.service.UserService;
 import com.api.gamesapi.util.LoginCreator;
-import com.api.gamesapi.util.UserCreator;
 import com.api.gamesapi.util.UserDTOCreator;
 
 @ExtendWith(SpringExtension.class)
@@ -33,8 +31,6 @@ class AuthenticationControllerTest {
     @BeforeEach
     void setup() {
         String token = "shagshg1212hgjsgd";
-        User user = UserCreator.createUserAdmin();
-        
         UserResponse userResponse = UserDTOCreator.createUserResponse();
         
         BDDMockito.when(userServiceMock.saveUser(ArgumentMatchers.any(UserRequest.class)))
