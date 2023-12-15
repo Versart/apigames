@@ -22,7 +22,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import com.api.gamesapi.api.model.LoginRequest;
@@ -31,7 +30,6 @@ import com.api.gamesapi.api.model.UserResponse;
 import com.api.gamesapi.domain.model.User;
 import com.api.gamesapi.domain.repository.UserRepository;
 import com.api.gamesapi.domain.service.UserService;
-import com.api.gamesapi.infra.security.TokenService;
 import com.api.gamesapi.util.UserCreator;
 import com.api.gamesapi.util.UserDTOCreator;
 import com.api.gamesapi.util.LoginCreator;
@@ -47,12 +45,6 @@ class AuthenticationControllerIT {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenService tokenService;
 
     @Autowired
     private UserRepository userRepository;    
