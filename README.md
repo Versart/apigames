@@ -18,8 +18,19 @@ API Rest Utilizando Spring boot que gerencia produtoras de games.
 * [Grafana](https://grafana.com/)
 * [Modelmapper](http://modelmapper.org/)
 
+## Como executar
+1. Clonar o repositório:
+```
+git clone https://github.com/Versart/apigames
+```
+2. Entrar no diretório clonado e executar o comando:
+```
+docker compose up
+```
+3. A aplicação poderá ser acessada em [localhost:8080](http://localhost:8080)
 ## API Endpoints
 Para fazer requisições, é necessário primeiramente se registrar, e depois fazer login para receber um token, este deve ser enviado em todas requisições.
+Para maiores informações dos endpoints, você poderá acessar a documentação em: [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 ### Authentication
 - POST /auth/register
 ```
