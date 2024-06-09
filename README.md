@@ -1,5 +1,5 @@
 # apigames
-API RESTtful utilizando Spring Boot que gerencia produtoras de games.
+API RESTful utilizando Spring Boot que gerencia produtoras de games.
 ## Tecnologias utilizadas:
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/3.0.2/reference/htmlsingle/#using.devtools)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/3.0.2/reference/htmlsingle/#web)
