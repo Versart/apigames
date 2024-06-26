@@ -16,6 +16,7 @@ API RESTful utilizando Spring Boot que gerencia produtoras de games.
 * [GitHub Actions](https://github.com/features/actions)
 * [Grafana](https://grafana.com/)
 * [Modelmapper](http://modelmapper.org/)
+* [MySQL](https://www.mysql.com/)
 
 ## Como executar
 1. Clonar o repositório:
