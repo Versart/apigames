@@ -27,7 +27,7 @@ git clone https://github.com/Versart/apigames
 ```
 docker compose up
 ```
-3. A aplicação poderá ser acessada em [localhost:8080](http://localhost:8080/swagger-ui.html)
+3. A aplicação poderá ser acessada em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 ## API Endpoints
 Para fazer requisições, é necessário primeiramente se registrar, e depois fazer login para receber um token, este deve ser enviado em todas requisições.
 Para maiores informações dos endpoints, você poderá acessar a documentação em: [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
